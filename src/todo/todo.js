@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-// import Modal from './todo/modal'
+import Modal from './modal'
 import data from './data.json';
 
 function Todo() {
@@ -11,18 +11,19 @@ function Todo() {
 
 
   const updateData = (e,taskId)=>{
+    for (let i = 0; i < todoList.length; i++) {
+      todoList[i].id = i+1;
+    }
     taskId = taskId+1;
     const todoChecked = todoList.map(obj => {
       if (obj.id === taskId) {
         return {...obj, complete: e.target.checked};
       }
-
       return obj;
     });
 
     setTodoList(todoChecked);
-   
-      }
+    }
 
   const onClick = ()=>{
     if(name==" " || name == "" || name.search("  ") > -1){alert("pls enter the task");return}
@@ -40,17 +41,22 @@ function Todo() {
   }
 
   const deleteElement = (e,taskId)=>{
+    for (let i = 0; i < todoList.length; i++) {
+      todoList[i].id = i+1;
+    }
     setTodoList((oldData) => oldData.filter((elem, index) => index !== taskId));
-    
   }
 
   const editElement = (e) =>{
-    var id = e.target.parentElement.parentElement.textContent[0]-1;
+    console.log(e.target.parentElement.parentElement.parentElement);
   }
+
 
   return ( 
     <div className="block">
-      {/* <Modal children={<p>123</p>} closeModal={true} title={'123'}/> */}
+      <div id="edit"><Modal children={<input type="text" className="input"/>} title={'Edit'}/></div>
+      <div id="delete"><Modal children={<p>do you want to delete that?</p>} title={'Delete?'}/></div>
+      <div id="null"><Modal children={<p>please enter a task</p>} title={'Warn'}/></div>
         <form className="input-container" onSubmit={preventReload}>
           <label className="field-label is-normal">Create Task</label>
             <input className="input is-8" type="text" id="name" placeholder="type your task" onChange={handleChange} />
@@ -61,7 +67,7 @@ function Todo() {
         <ul>
         {todoList.map((task, index) => (
             <li key={index}>
-                <div className= {`box ${task.complete?"has-background-warning":"has-background-success"}`}><span>{task.id}</span>{"- "+task.task}
+                <div className= {`box ${task.complete?"has-background-warning":"has-background-success"}`}><span>{index+1}</span>{"- "+task.task}
                 <button className="button is-pulled-right is-danger" onClick={(e)=>deleteElement(e,index)}>❌</button>
                 <button className="button is-pulled-right is-info" onClick={editElement}>🖊</button>
                 <input type="checkbox" className="checkbox is-pulled-right is-info" onChange={(e)=>updateData(e,index)} defaultChecked={task.complete}/>
