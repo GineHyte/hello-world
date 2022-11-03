@@ -25,25 +25,29 @@ function Todo() {
     setTodoList(todoChecked);
     }
 
-  const onClick = ()=>{
-    if(name===" " || name === "" || name.search("  ") > -1){alert("pls enter the task");return}
+  const onClick = (e)=>{
+    if(e.target.parentElement.children[1].value === "" ||
+     e.target.parentElement.children[1].value.trim().length === 0){
+      setName("");
+      var modal = document.getElementById("null");
+      modal.style.display = "block";
+      return}
       const newTodo = {id:todoList.length+1,task:name,complete:false};
       setTodoList([...todoList,newTodo]);
   }
   const preventReload = (e) =>{e.preventDefault(); e.target[0].value = ""}
 
   const handleChange = (event)=>{
+    if(event.target.value === "" || event.target.value.trim().length === 0){setName(""); return}
     setName(event.target.value);
   }
 
-  const deleteList = (event)=>{
+  const deleteList = ()=>{
     setTodoList([])
   }
 
   const deleteElement = (e,taskId)=>{
-    for (let i = 0; i < todoList.length; i++) {
-      todoList[i].id = i+1;
-    }
+    for (let i = 0; i < todoList.length; i++) todoList[i].id = i+1
     setTodoList((oldData) => oldData.filter((elem, index) => index !== taskId));
   }
 
@@ -134,7 +138,7 @@ function Todo() {
                 <div className= {`box ${task.complete?"has-background-warning":"has-background-success"}`}><span>{index+1}</span>{"- "+task.task}
                 <button className="button is-pulled-right is-danger" onClick={(e)=>deleteElement(e,index)}>❌</button>
                 <button className="button is-pulled-right is-info" onClick={(e)=>editElement(e, index)}>🖊</button>
-                <input type="checkbox" className="checkbox is-pulled-right is-info" onChange={(e)=>updateData(e,index)} defaultChecked={task.complete}/>
+                <input type="checkbox" className="checkbox is-pulled-right is-info" onChange={(e)=>updateData(e,index)} defaultChecked={task.complete} required/>
                 </div>
                 </li>
         ))}    
