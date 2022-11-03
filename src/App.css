@@ -3,8 +3,6 @@
 }
 .block .input-container {
   padding: 20px;
-  display: flex;
-  align-items: center;
 }
 .block .input-container h1 {
   margin-left: 20px;

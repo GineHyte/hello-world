@@ -1,7 +1,8 @@
 [{
     "id": 1,
     "task": "Give dog a bath",
-    "complete": true
+    "complete": true,
+    "description": "Give dog a bath and brush his teeth"
   }, {
     "id": 2,
     "task": "Do laundry",
