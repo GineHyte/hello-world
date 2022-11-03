@@ -5,25 +5,35 @@ import data from './data.json';
 function Todo() {
   const [name,setName]=useState();
   const [todoList,setTodoList]=useState(data);
+  var isQueryDelete=false;
+  var isQueryDeleteAll=false;
+  var deleteIndex=-1;
 
   useEffect(() => {
   },[]);
 
 
-  const updateData = (e,taskId)=>{
+  const updateData = (state,taskId)=>{
     for (let i = 0; i < todoList.length; i++) {
       todoList[i].id = i+1;
     }
     taskId = taskId+1;
     const todoChecked = todoList.map(obj => {
       if (obj.id === taskId) {
-        return {...obj, complete: e.target.checked};
+        return {...obj, complete: state};
       }
       return obj;
     });
-
     setTodoList(todoChecked);
+    for (let i = 0; i < todoList.length-1; i++) {
+      document.querySelector('ul').children[i].children[0].children[3].checked = todoList[i].complete;
+      if(todoList[i].complete===true && todoList[i+1].complete===false){var joint = i;} 
+      if(todoList[i].complete===false && todoList[i+1].complete===true){var joint = i;}
     }
+    if (!state){
+        document.querySelector('ul').children[joint+1].children[0].children[3].checked = false}
+    else{document.querySelector('ul').children[joint].children[0].children[3].checked = true}
+  }
 
   const onClick = (e)=>{
     if(e.target.parentElement.children[1].value === "" ||
@@ -32,6 +42,15 @@ function Todo() {
       var modal = document.getElementById("null");
       modal.style.display = "block";
       return}
+      for (let i = 0; i < todoList.length-1; i++) {
+        document.querySelector('ul').children[i].children[0].children[3].checked = todoList[i].complete;
+        if(todoList[i].complete===true && todoList[i+1].complete===false){var joint = i;} 
+        if(todoList[i].complete===false && todoList[i+1].complete===true){var joint = i;}
+      }
+      var state = false;
+      if (!state){
+        document.querySelector('ul').children[joint+1].children[0].children[3].checked = false}
+      else{document.querySelector('ul').children[joint].children[0].children[3].checked = true}
       const newTodo = {id:todoList.length+1,task:name,complete:false};
       setTodoList([...todoList,newTodo]);
   }
@@ -49,6 +68,57 @@ function Todo() {
   const deleteElement = (e,taskId)=>{
     for (let i = 0; i < todoList.length; i++) todoList[i].id = i+1
     setTodoList((oldData) => oldData.filter((elem, index) => index !== taskId));
+    for (let i = 0; i < todoList.length-1; i++) {
+      document.querySelector('ul').children[i].children[0].children[3].checked = todoList[i].complete;
+      if(todoList[i].complete===true && todoList[i+1].complete===false){var joint = i;} 
+      if(todoList[i].complete===false && todoList[i+1].complete===true){var joint = i;}
+    }
+    var state = true;
+    if (!state){
+      document.querySelector('ul').children[joint+1].children[0].children[3].checked = false}
+    else{document.querySelector('ul').children[joint].children[0].children[3].checked = true}
+  }
+
+  const deleteElementModal = (e,taskId, reason)=>{
+    switch (reason) {
+      case "queryAll":
+        if(!isQueryDeleteAll){
+          var modal = document.getElementById("Delete");
+          modal.style.display = "block";
+          modal.children[0].children[1].children[0].children[1].children[0].textContent = "do you want to delete all?";
+          isQueryDeleteAll = true;
+        }
+        break;
+      case "query":
+        if(!isQueryDelete){
+          var modal = document.getElementById("Delete");
+          modal.style.display = "block";
+          modal.children[0].children[1].children[0].children[1].children[0].textContent = "do you want to delete " + todoList[taskId].task + "?";
+          isQueryDelete = true;
+          deleteIndex = taskId;
+        }
+        break;
+      case "Accept":
+        if(isQueryDeleteAll){
+          deleteList();
+          isQueryDeleteAll = false;
+          var modal = document.getElementById("Delete");
+          modal.style.display = "none";
+          break;
+        }
+        deleteElement(e,deleteIndex);
+        var modal = document.getElementById("Delete");
+        modal.style.display = "none";
+        isQueryDelete = false;
+        break;
+      case "Cancel":
+        var modal = document.getElementById("Delete");
+        modal.style.display = "none";
+        isQueryDelete = false;
+        isQueryDeleteAll = false;
+        break;
+      default:console.log("Something went wrong");break;
+    }
   }
 
   const editElement = (e, id) =>{
@@ -71,12 +141,17 @@ function Todo() {
     id = parseInt(id)+1;
     if (id <= -1) {console.log("something went wrong");return}
     var input = e.target.parentElement.parentElement.children[1].children[0];
-    for (let c of todoList){ if (c.id == id) {c.task = input.value;}}
+    for (let c of todoList){ if (c.id === id) {c.task = input.value;}}
     setTodoList([...todoList]);
     closeModal(e, title);
   }
 
+  const sort = (e) =>{
+    todoList.sort((a, b) => (a.complete > b.complete) ? 1 : -1); 
 
+  }
+
+  sort();
   return ( 
     <div className="block">
       <div className="edit" id="Edit"><Modal content={
@@ -102,11 +177,11 @@ function Todo() {
             <button className="delete" onClick={(e)=>closeModal(e,'Delete')} aria-label="close"></button>
           </header>
           <section className="modal-card-body">
-          <p>do you want to delete that?</p>
+          <p>something went wrong</p>
           </section>
             <footer className="modal-card-foot">
-            <button className="button is-success" onClick={(e)=>closeModal(e,'Delete')}>Save changes</button>
-            <button className="button" onClick={(e)=>closeModal(e,'Delete')}>Cancel</button>
+            <button className="button is-success" onClick={(e)=>deleteElementModal(e, "-1", "Accept")}>Accept</button>
+            <button className="button" onClick={(e)=>deleteElementModal(e, "-1", "Cancel")}>Cancel</button>
             </footer>
           </div>
       }/></div>
@@ -120,8 +195,7 @@ function Todo() {
           <p>please enter a task</p>
           </section>
             <footer className="modal-card-foot">
-            <button className="button is-success" onClick={(e)=>closeModal(e,'null')}>Save changes</button>
-            <button className="button" onClick={(e)=>closeModal(e,'null')}>Cancel</button>
+            <button className="button" onClick={(e)=>closeModal(e,'null')}>Close</button>
             </footer>
           </div>
       }/></div>
@@ -129,16 +203,16 @@ function Todo() {
           <label className="field-label is-normal">Create Task</label>
             <input className="input is-8" type="text" id="name" placeholder="type your task" onChange={handleChange} />
             <input  className="button" type="submit" value="add" onClick={onClick} />   
-            <button className="button" onClick={deleteList}>delete list</button>
+            <button className="button" onClick={(e)=>deleteElementModal(e, '-1', "queryAll")}>delete list</button>
           
         </form>
         <ul>
         {todoList.map((task, index) => (
             <li key={index}>
-                <div className= {`box ${task.complete?"has-background-warning":"has-background-success"}`}><span>{index+1}</span>{"- "+task.task}
-                <button className="button is-pulled-right is-danger" onClick={(e)=>deleteElement(e,index)}>❌</button>
+                <div className= {`box ${task.complete?"has-background-warning is-line-through":"has-background-success"} `}><span>{index+1}</span>{"- "+task.task}
+                <button className="button is-pulled-right is-danger" onClick={(e)=>deleteElementModal(e,index, "query")}>❌</button>
                 <button className="button is-pulled-right is-info" onClick={(e)=>editElement(e, index)}>🖊</button>
-                <input type="checkbox" className="checkbox is-pulled-right is-info" onChange={(e)=>updateData(e,index)} defaultChecked={task.complete} required/>
+                <input type="checkbox" className="checkbox is-pulled-right is-info" onClick={(e)=>updateData(e.target.checked,index)} defaultChecked={task.complete}  required/>
                 </div>
                 </li>
         ))}    

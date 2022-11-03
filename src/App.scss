@@ -39,6 +39,9 @@
 }
 
 .modal{
-  opacity: 1;
-  transition: opacity 300ms ease-in-out;
+    p{font-size: 24px;}
+    opacity: 1;
+    transition: opacity 300ms ease-in-out;
 }
+
+.is-line-through{text-decoration: line-through;}

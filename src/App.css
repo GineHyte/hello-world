@@ -38,4 +38,11 @@
 .modal {
   opacity: 1;
   transition: opacity 300ms ease-in-out;
+}
+.modal p {
+  font-size: 24px;
+}
+
+.is-line-through {
+  text-decoration: line-through;
 }/*# sourceMappingURL=App.css.map */
