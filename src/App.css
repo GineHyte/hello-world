@@ -28,6 +28,12 @@
   margin-block: auto;
   margin-inline: 5px;
 }
+.block .edit, .block .delete, .block .null {
+  display: none;
+}
+.block .edit {
+  --id:-1;
+}
 
 .modal {
   opacity: 1;
