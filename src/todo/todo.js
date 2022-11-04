@@ -23,8 +23,7 @@ function Todo() {
       document.querySelector('ul').children[0].children[0].children[i].children[0].children[4].checked = todoList[i].complete;
     }
   }
-  var showedDescription = joint+1;
-  console.log("showed description now is: " + showedDescription + " and joint is: " + joint);}
+  var showedDescription = joint+1;}
 } catch (e) {console.log("unable to get joint")}
 
   useEffect(() => {
@@ -58,6 +57,7 @@ function Todo() {
       }
       else { document.querySelector('ul').children[0].children[0].children[joint].children[0].children[4].checked = true }
     }
+    if (showedDescription === "")document.querySelector('ul').children[0].children[0].children[taskId].children[0].children[1].click();
     if (showedDescription === (taskId-1) || showedDescription === (taskId)) {
       var description = document.getElementById('description-column');
       showedDescription = joint+1;
@@ -126,6 +126,7 @@ function Todo() {
   }
 
   const deleteList = () => {
+    document.getElementById("description-column").style.display = "none";
     setTodoList([])
   }
 
@@ -235,6 +236,7 @@ function Todo() {
     description.children[0].children[1].children[0].textContent = todoList[id].task;
     description.children[0].children[1].children[1].textContent = todoList[id].description;
     description.children[0].children[0].children[0].children[0].src = todoList[id].image;
+    description.children[0].children[0].children[0].children[0].alt = todoList[id].image + " - its not a link ಠ_ಠ";
 
     if (todoList[id].complete) {
       description.children[0].children[2].textContent = "Completed";
