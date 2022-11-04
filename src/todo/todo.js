@@ -4,10 +4,28 @@ import data from './data.json';
 
 function Todo() {
   const [name, setName] = useState();
+  const [description, setDescription] = useState();
+  const [image, setImage] = useState();
   const [todoList, setTodoList] = useState(data);
   var isQueryDelete = false;
   var isQueryDeleteAll = false;
   var deleteIndex = -1;
+  var k = 0;
+  var joint = -1;
+  try{
+    if (document.getElementById("description-column").style.display !== "none" || document.getElementById("description-column").style.display !== ""){
+  if (Math.abs(k) === todoList.length) { k = -1 } else { k = 1 }
+  if (k > -1) {
+    for (let i = 0; i < todoList.length; i++) {
+      if ((todoList[i].complete === true && todoList[i + 1].complete === false) || (todoList[i].complete === false && todoList[i + 1].complete === true)) { joint=i; break }
+    }
+    for (let i = 0; i < todoList.length; i++) {
+      document.querySelector('ul').children[0].children[0].children[i].children[0].children[4].checked = todoList[i].complete;
+    }
+  }
+  var showedDescription = joint+1;
+  console.log("showed description now is: " + showedDescription + " and joint is: " + joint);}
+} catch (e) {console.log("unable to get joint")}
 
   useEffect(() => {
   }, []);
@@ -30,52 +48,81 @@ function Todo() {
     setTodoList(todoChecked);
     if (k > -1) {
       for (let i = 0; i < todoList.length; i++) {
-        if ((todoList[i].complete === true && todoList[i + 1].complete === false) || (todoList[i].complete === false && todoList[i + 1].complete === true)) { var joint = i; break}}
-        for (let i = 0; i < todoList.length; i++) {
-          document.querySelector('ul').children[i].children[0].children[3].checked = todoList[i].complete;
-        }
-      if (!state) {
-        document.querySelector('ul').children[joint + 1].children[0].children[3].checked = false
+        if ((todoList[i].complete === true && todoList[i + 1].complete === false) || (todoList[i].complete === false && todoList[i + 1].complete === true)) { var joint = i; break }
       }
-      else { document.querySelector('ul').children[joint].children[0].children[3].checked = true }
+      for (let i = 0; i < todoList.length; i++) {
+        document.querySelector('ul').children[0].children[0].children[i].children[0].children[4].checked = todoList[i].complete;
+      }
+      if (!state) {
+        document.querySelector('ul').children[0].children[0].children[joint + 1].children[0].children[4].checked = false
+      }
+      else { document.querySelector('ul').children[0].children[0].children[joint].children[0].children[4].checked = true }
+    }
+    if (showedDescription === (taskId-1) || showedDescription === (taskId)) {
+      var description = document.getElementById('description-column');
+      showedDescription = joint+1;
+      if (state) {
+        description.children[0].children[2].textContent = "Completed";
+        description.children[0].children[2].classList.replace("has-text-danger", "has-text-success");
+      }
+      else {
+        description.children[0].children[2].textContent = "Not Completed";
+        description.children[0].children[2].classList.replace("has-text-success", "has-text-danger");
+      }
     }
   }
 
   const onClick = (e) => {
     var k = 0;
-    if (e.target.parentElement.children[1].value === "" ||
-      e.target.parentElement.children[1].value.trim().length === 0) {
-      setName("");
-      var modal = document.getElementById("null");
-      modal.style.display = "block";
-      return
+    for (let i = 0; i <= 2; i++) {
+      if (e.target.parentElement.children[i].children[1].value === "" ||
+        e.target.parentElement.children[i].children[1].value.trim().length === 0) {
+        var modal = document.getElementById("null");
+        if (i == 0) { setDescription(""); modal.children[0].children[1].children[0].children[1].children[0].textContent = "please enter the task name" }
+        if (i == 1) { setDescription(""); modal.children[0].children[1].children[0].children[1].children[0].textContent = "please enter the task description" }
+        if (i == 2) { setImage(""); modal.children[0].children[1].children[0].children[1].children[0].textContent = "please enter url of the task image" }
+        modal.style.display = "block";
+        return
+      }
     }
-
     for (let i = 0; i < todoList.length; i++) {
       if (todoList[i].complete) { k++ } else { k-- }
     }
     if (Math.abs(k) === todoList.length || Math.abs(k) === todoList.length) { k = -1 } else { k = 1 }
     if (k > -1 && todoList.length > 0) {
       for (let i = 0; i < todoList.length; i++) {
-        if ((todoList[i].complete === true && todoList[i + 1].complete === false) || (todoList[i].complete === false && todoList[i + 1].complete === true)) { var joint = i; break}}
-        for (let i = 0; i < todoList.length; i++) {
-          document.querySelector('ul').children[i].children[0].children[3].checked = todoList[i].complete;
-        }
+        if ((todoList[i].complete === true && todoList[i + 1].complete === false) || (todoList[i].complete === false && todoList[i + 1].complete === true)) { var joint = i; break }
+      }
+      for (let i = 0; i < todoList.length; i++) {
+        document.querySelector('ul').children[0].children[0].children[i].children[0].children[4].checked = todoList[i].complete;
+      }
       var state = false;
       if (!state) {
-        document.querySelector('ul').children[joint + 1].children[0].children[3].checked = false
+        document.querySelector('ul').children[0].children[0].children[joint + 1].children[0].children[4].checked = false
       }
-      else { document.querySelector('ul').children[joint].children[0].children[3].checked = true }
+      else { document.querySelector('ul').children[0].children[0].children[joint].children[0].children[4].checked = true }
     }
-    const newTodo = { id: todoList.length + 1, task: name, complete: false };
+    const newTodo = { id: todoList.length + 1, task: name, complete: false, description: description, image: image };
+    console.log(newTodo);
     setTodoList([...todoList, newTodo]);
   }
-  
-  const preventReload = (e) => { e.preventDefault(); e.target[0].value = "" }
+
+  const preventReload = (e) => { e.preventDefault(); for (let i = 0; i <= 2; i++)e.target[i].value = "" }
 
   const handleChange = (event) => {
-    if (event.target.value === "" || event.target.value.trim().length === 0) { setName(""); return }
-    setName(event.target.value);
+    if (event.target.value === "" || event.target.value.trim().length === 0) { setName(""); setDescription(""); setImage(""); return }
+    var inputType = event.target.id;
+    switch (inputType) {
+      case "name":
+        setName(event.target.value);
+        break;
+      case "description":
+        setDescription(event.target.value);
+        break;
+      case "image":
+        setImage(event.target.value);
+        break;
+    }
   }
 
   const deleteList = () => {
@@ -84,6 +131,7 @@ function Todo() {
 
   const deleteElement = (e, taskId) => {
     var k = 0;
+    if (taskId === showedDescription) { document.getElementById("description-column").style.display = "none"; console.log("description:" + showedDescription); }
     for (let i = 0; i < todoList.length; i++) todoList[i].id = i + 1
     setTodoList((oldData) => oldData.filter((elem, index) => index !== taskId));
     for (let i = 0; i < todoList.length; i++) {
@@ -92,18 +140,18 @@ function Todo() {
     if (Math.abs(k) === todoList.length) { k = -1 } else { k = 1 }
     if (k > -1) {
       for (let i = 0; i < todoList.length; i++) {
-      if ((todoList[i].complete === true && todoList[i + 1].complete === false) || (todoList[i].complete === false && todoList[i + 1].complete === true)) { var joint = i; break}}
+        if ((todoList[i].complete === true && todoList[i + 1].complete === false) || (todoList[i].complete === false && todoList[i + 1].complete === true)) { var joint = i; break }
+      }
       for (let i = 0; i < todoList.length; i++) {
-        document.querySelector('ul').children[i].children[0].children[3].checked = todoList[i].complete;
+        document.querySelector('ul').children[0].children[0].children[i].children[0].children[4].checked = todoList[i].complete;
       }
       var state = true;
       if (!state) {
-        document.querySelector('ul').children[joint + 1].children[0].children[3].checked = false
+        document.querySelector('ul').children[0].children[0].children[joint + 1].children[0].children[4].checked = false
       }
-      else { document.querySelector('ul').children[joint].children[0].children[3].checked = true }
+      else { document.querySelector('ul').children[0].children[0].children[joint].children[0].children[4].checked = true }
     }
   }
-
 
   const deleteElementModal = (e, taskId, reason) => {
     switch (reason) {
@@ -170,11 +218,32 @@ function Todo() {
     for (let c of todoList) { if (c.id === id) { c.task = input.value; } }
     setTodoList([...todoList]);
     closeModal(e, title);
+    document.querySelector('ul').children[0].children[0].children[id-1].children[0].children[1].click();
   }
 
   const sort = (e) => {
     todoList.sort((a, b) => (a.complete > b.complete) ? 1 : -1);
 
+  }
+
+  const showDescription = (e, id) => {
+    showedDescription = id;
+
+    var description = document.getElementById("description-column");
+    description.style.display = "block";
+
+    description.children[0].children[1].children[0].textContent = todoList[id].task;
+    description.children[0].children[1].children[1].textContent = todoList[id].description;
+    description.children[0].children[0].children[0].children[0].src = todoList[id].image;
+
+    if (todoList[id].complete) {
+      description.children[0].children[2].textContent = "Completed";
+      description.children[0].children[2].classList.replace("has-text-danger", "has-text-success");
+    }
+    else {
+      description.children[0].children[2].textContent = "Not Completed";
+      description.children[0].children[2].classList.replace("has-text-success", "has-text-danger");
+    }
   }
 
   sort();
@@ -226,60 +295,53 @@ function Todo() {
         </div>
       } /></div>
       <form className="input-container" onSubmit={preventReload}>
-        <label className="field-label is-normal">Task</label>
-        <input className="input is-8" type="text" id="name" placeholder="type your task" onChange={handleChange} />
-        <label className="field-label is-normal">Task descrition</label>
-        <input className="input is-8" type="text" id="name" placeholder="type your task" onChange={handleChange} />
-        <label className="field-label is-normal">Image</label>
-        <input className="input is-8" type="text" id="name" placeholder="type your task" onChange={handleChange} />
-        <input className="button" type="submit" value="add" onClick={onClick} />
-        <button className="button" onClick={(e) => deleteElementModal(e, '-1', "queryAll")}>delete list</button>
-         ///Todo: 3 lines inputs then save and close btn 
+        <div className="input-box">
+          <label className="label is-normal is-pulled-left">Task</label>
+          <input className="input" type="text" id="name" placeholder="type your task here" onChange={handleChange} />
+        </div>
+        <div className="input-box">
+          <label className="label is-normal is-pulled-left">Task descrition</label>
+          <input className="input" type="text" id="description" placeholder="type the descrition of task here" onChange={handleChange} />
+        </div>
+        <div className="input-box">
+          <label className="label is-normal is-pulled-left">Image</label>
+          <input className="input" type="text" id="image" placeholder="paste the url of image here" onChange={handleChange} />
+        </div>
+        <input className="button is-success" type="submit" value="add" onClick={onClick} />
+        <button className="button is-danger" onClick={(e) => deleteElementModal(e, '-1', "queryAll")}>delete list</button>
+
+        {/* Todo: 3 lines inputs then save and close btn   */}
       </form>
       <ul>
         <div className="columns">
           <div className="column">
-        {todoList.map((task, index) => (
-          <li key={index}>
-            
-            <div className={` box ${task.complete ? "has-background-warning is-line-through" : "has-background-success"} `} onClick={(e)=> console.log(e)}><span>{index + 1}</span>{"- " + task.task}
-              <button className="button is-pulled-right is-danger" onClick={(e) => deleteElementModal(e, index, "query")}>❌</button>
-              <button className="button is-pulled-right is-info" onClick={(e) => editElement(e, index)}>🖊</button>
-              <input type="checkbox" className="checkbox is-pulled-right is-info" onClick={(e) => updateData(e.target.checked, index)} defaultChecked={task.complete} required />
+            {todoList.map((task, index) => (
+              <li key={index}>
+                <div className={` box ${task.complete ? "has-background-warning is-line-through" : "has-background-success"} `}><span>{index + 1}</span>{"- " + task.task}
+                  <button className="button is-pulled-right is-info" onClick={(e) => showDescription(e, index)}>❔</button>
+                  <button className="button is-pulled-right is-danger" onClick={(e) => deleteElementModal(e, index, "query")}>❌</button>
+                  <button className="button is-pulled-right is-link" onClick={(e) => editElement(e, index)}>🖊</button>
+                  <input type="checkbox" className="checkbox is-pulled-right is-info" onClick={(e) => updateData(e.target.checked, index)} defaultChecked={task.complete} required />
+                </div>
+              </li>
+            ))}
+          </div>
+          <div className="column box has-background-info description-column" id="description-column">
+            <div className="card">
+              <div className="card-image">
+                <figure className="image is-4by3">
+                  <img src="https://www.modernbathroom.com/blog/image.axd?picture=/7-5-18.jpg" alt="data" />
+                </figure>
+              </div>
+              <div className="card-content">
+                <p className="title is-4">Give dog a bath</p>
+                <div className="content">
+                  Give dog a bath and brush his teeth
+                </div>
+              </div>
+              <div className="card-footer has-text-weight-bold has-text-success">Complete</div>
             </div>
-          </li>
-        ))}
-        </div>
-        <div className="column">
-        <div class="card">
-  <div class="card-image">
-    <figure class="image is-4by3">
-      <img src="https://bulma.io/images/placeholders/1280x960.png" alt="Placeholder image"/>
-    </figure>
-  </div>
-  <div class="card-content">
-    <div class="media">
-      <div class="media-left">
-        <figure class="image is-48x48">
-          <img src="https://bulma.io/images/placeholders/96x96.png" alt="Placeholder image"/>
-        </figure>
-      </div>
-      <div class="media-content">
-        <p class="title is-4">John Smith</p>
-        <p class="subtitle is-6">@johnsmith</p>
-      </div>
-    </div>
-
-    <div class="content">
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-      Phasellus nec iaculis mauris. <a>@bulmaio</a>.
-      <a href="#">#css</a> <a href="#">#responsive</a>
-      <br/>
-      <time datetime="2016-1-1">11:09 PM - 1 Jan 2016</time>
-    </div>
-  </div>
-</div>
-        </div>
+          </div>
         </div>
       </ul>
     </div>

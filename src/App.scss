@@ -4,6 +4,25 @@
         padding: 20px;
 
         h1{margin-left: 20px;}
+
+        .input-box{
+            display: flex;
+            margin-top: 15px;
+
+            input{
+                width: 90%;
+            }
+
+            label{
+                width: 200px;
+                white-space: nowrap;
+            }
+        }
+
+        button, input[type="submit"]{
+            margin-top: 20px;
+            margin-left: 10px;
+        }
     }
     ul{
         li{
@@ -28,9 +47,21 @@
                 margin-block: auto;
                 margin-inline: 5px;
             }
-
         }
 
+        .description-column{
+            display: none;
+            height: 60%;
+
+            .card{
+                box-shadow: 4px 3px 10px 1px rgba(0,0,0,0.51);
+                border-radius: 15px;
+            }
+
+            .card-footer{
+                padding: 0 0 20px 20px;
+            }
+        }
     }
     .edit, .delete, .null{display: none;}
     .edit{--id:-1;}
