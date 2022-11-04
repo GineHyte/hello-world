@@ -49,6 +49,11 @@
             }
         }
 
+        .is-disabled{
+            background-color: gray !important;
+            opacity: 0.8;
+        }
+
         .description-column{
             display: none;
             height: 60%;

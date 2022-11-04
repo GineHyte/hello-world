@@ -1,121 +1,43 @@
 [{
     "id": 1,
-    "task": "Give dog a bath",
+    "task": "Delete button",
     "complete": true,
-    "description": "Give dog a bath and brush his teeth",
-    "image": "https://www.modernbathroom.com/blog/image.axd?picture=/7-5-18.jpg"
+    "description": "Delete button should be red",
+    "image": "https://gcdnb.pbrd.co/images/gxC7XkwDihPP.png?o=1",
+    "color": "#17BEBB"
   }, {
     "id": 2,
-    "task": "Do laundry",
+    "task": "Remove margin",
     "complete": true,
-    "description": "Do laundry and fold clothes",
-    "image": "https://media.cnn.com/api/v1/images/stellar/prod/210915133905-how-to-do-laundry-lead.jpg?q=x_0,y_0,h_900,w_1601,c_fill/h_270,w_480"
+    "description": "Remove margin from top",
+    "image": "https://img001.prntscr.com/file/img001/IzszNeuaQySWqFxXsdSTcg.png",
+    "color": "#EF3E36"
   }, {
     "id": 3,
-    "task": "Vacuum floor",
+    "task": "Create file structure",
     "complete": false,
-    "description": "Vacuum floor and clean the kitchen",
-    "image": "https://cdn.shopify.com/s/files/1/0551/9032/3355/products/01_5797412e-6e13-41c6-96fd-8f5af4fdb9f1_600x600.jpg?v=1631617030"
+    "description": "Create file structure for the project",
+    "image": "https://img001.prntscr.com/file/img001/AwbTAUSsS4CCiODZr9kCPw.png",
+    "color": "#2E282A"
   }, {
     "id": 4,
-    "task": "Feed cat",
+    "task": "Create a new branch",
     "complete": true,
-    "description": "Feed cat and clean litter box",
-    "image": "https://www.purina-arabia.com/sites/default/files/2021-03/Article%20teaser%20cat%20feeding.jpg"
+    "description": "Create a new branch for the project",
+    "image": "https://img001.prntscr.com/file/img001/iwGleU1xR9e0noFlLt1A6w.png",
+    "color": "#EDB88B"
   }, {
     "id": 5,
-    "task": "Change light bulbs",
+    "task": "Install dependencies",
     "complete": false,
-    "description": "Change light bulbs in the living room",
-    "image": "https://cdn.images.express.co.uk/img/dynamic/51/590x/changing-a-lightbulb-1552673.jpg?r=1642628245852"
+    "description": "Use 'npm install' to install dependencies",
+    "image": "https://img001.prntscr.com/file/img001/F839B5y0RNq8vSUZpAba9Q.png",
+    "color": "#FAD8D6"
   }, {
     "id": 6,
-    "task": "Go to Store",
-    "complete": true,
-    "description": "Go to store and buy groceries",
-    "image": "https://media-cldnry.s-nbcnews.com/image/upload/newscms/2017_09/1198475/woman-shopping-today-170301-tease.jpg"
-  }, {
-    "id": 7,
-    "task": "Fill gas tank",
-    "complete": true,
-    "description": "Fill gas tank and check oil",
-    "image": "https://i.ytimg.com/vi/LtHKn_jDy00/maxresdefault.jpg"
-  }, {
-    "id": 8,
-    "task": "Change linens",
+    "task": "Download vscode",
     "complete": false,
-    "description": "Change linens and clean the bathroom",
-    "image": "https://ichef.bbci.co.uk/news/976/cpsprodpb/16C0A/production/_124349139_gettyimages-494324281.jpg"
-  }, {
-    "id": 9,
-    "task": "Rake leaves",
-    "complete": true,
-    "description": "Rake leaves and clean the gutters",
-    "image": "https://www.gannett-cdn.com/-mm-/227fe3e7205224abd281f6d4484ac62595ab0450/c=0-308-6048-3725/local/-/media/2017/03/01/Cincinnati/Cincinnati/636239846074952147-CINCpt-11-20-2016-Enquirer-1-AA002--2016-11-18-IMG-Fall-leaves-with-rak-1-1-G6GDSTKH-L921043441-IMG-Fall-leaves-with-rak-1-1-G6GDSTKH.jpg?width=3200&height=1808&fit=crop&format=pjpg&auto=webp"
-  }, {
-    "id": 10,
-    "task": "Bake Cookies",
-    "complete": false,
-    "description": "Bake cookies and make a cake",
-    "image": "https://images-gmi-pmc.edge-generalmills.com/087d17eb-500e-4b26-abd1-4f9ffa96a2c6.jpg"
-  }, {
-    "id": 11,
-    "task": "Take nap",
-    "complete": true,
-    "description": "Take a nap and relax",
-    "image": "https://www.thensf.org/wp-content/uploads/2021/05/woman-napping-400x400-1.jpg"
-  }, {
-    "id": 12,
-    "task": "Read book",
-    "complete": true,
-    "description": "Read a book and watch a movie",
-    "image": "https://www.oberlo.com/media/1612639204-image3.jpg"
-  }, {
-    "id": 13,
-    "task": "Exercise",
-    "complete": false,
-    "description": "Exercise and go for a walk",
-    "image": "https://health.clevelandclinic.org/wp-content/uploads/sites/3/2022/04/exerciseHowOften-944015592-770x533-1-650x428.jpg"
-  }, {
-    "id": 14,
-    "task": "Give dog a bath",
-    "complete": true,
-    "description": "Give dog a bath and brush his teeth",
-    "image": "https://www.modernbathroom.com/blog/image.axd?picture=/7-5-18.jpg"
-  }, {
-    "id": 15,
-    "task": "Do laundry",
-    "complete": true,
-    "description": "Do laundry and fold clothes",
-    "image": "https://media.cnn.com/api/v1/images/stellar/prod/210915133905-how-to-do-laundry-lead.jpg?q=x_0,y_0,h_900,w_1601,c_fill/h_270,w_480"
-  }, {
-    "id": 16,
-    "task": "Vacuum floor",
-    "complete": false,
-    "description": "Vacuum floor and clean the kitchen",
-    "image": "https://cdn.shopify.com/s/files/1/0551/9032/3355/products/01_5797412e-6e13-41c6-96fd-8f5af4fdb9f1_600x600.jpg?v=1631617030"
-  }, {
-    "id": 17,
-    "task": "Feed cat",
-    "complete": true,
-    "description": "Feed cat and clean litter box",
-    "image": "https://www.purina-arabia.com/sites/default/files/2021-03/Article%20teaser%20cat%20feeding.jpg"
-  }, {
-    "id": 18,
-    "task": "Change light bulbs",
-    "complete": false,
-    "description": "Change light bulbs in the living room",
-    "image": "https://cdn.images.express.co.uk/img/dynamic/51/590x/changing-a-lightbulb-1552673.jpg?r=1642628245852"
-  }, {
-    "id": 19,
-    "task": "Go to Store",
-    "complete": true,
-    "description": "Go to store and buy groceries",
-    "image": "https://media-cldnry.s-nbcnews.com/image/upload/newscms/2017_09/1198475/woman-shopping-today-170301-tease.jpg"
-  }, {
-    "id": 20,
-    "task": "Fill gas tank",
-    "complete": false,
-    "description": "Fill gas tank and check oil",
-    "image": "https://i.ytimg.com/vi/LtHKn_jDy00/maxresdefault.jpg"
+    "description": "You can download vscode from https://code.visualstudio.com/",
+    "image": "https://img001.prntscr.com/file/img001/9OMKJmCjRWGwq_v5WPW9mA.png",
+    "color": "#F6AE2D"
   }]

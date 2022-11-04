@@ -1,8 +1,12 @@
 import { useEffect, useState } from "react";
 import Modal from './modal'
 import data from './data.json';
+import TaskForm from './task-form';
+import TaskCard from "./task-card";
 
 function Todo() {
+  const [id, setId] = useState(-1);
+  const [color, setColor] = useState();
   const [name, setName] = useState();
   const [description, setDescription] = useState();
   const [image, setImage] = useState();
@@ -10,21 +14,22 @@ function Todo() {
   var isQueryDelete = false;
   var isQueryDeleteAll = false;
   var deleteIndex = -1;
-  var k = 0;
-  var joint = -1;
-  try{
-    if (document.getElementById("description-column").style.display !== "none" || document.getElementById("description-column").style.display !== ""){
-  if (Math.abs(k) === todoList.length) { k = -1 } else { k = 1 }
-  if (k > -1) {
-    for (let i = 0; i < todoList.length; i++) {
-      if ((todoList[i].complete === true && todoList[i + 1].complete === false) || (todoList[i].complete === false && todoList[i + 1].complete === true)) { joint=i; break }
-    }
-    for (let i = 0; i < todoList.length; i++) {
-      document.querySelector('ul').children[0].children[0].children[i].children[0].children[4].checked = todoList[i].complete;
-    }
-  }
-  var showedDescription = joint+1;}
-} catch (e) {console.log("unable to get joint")}
+  // var k = 0;
+  // var joint = -1;
+  // try {
+  //   if (document.getElementById("description-column").style.display !== "none" || document.getElementById("description-column").style.display !== "") {
+  //     if (Math.abs(k) === todoList.length) { k = -1 } else { k = 1 }
+  //     if (k > -1) {
+  //       for (let i = 0; i < todoList.length; i++) {
+  //         if ((todoList[i].complete === true && todoList[i + 1].complete === false) || (todoList[i].complete === false && todoList[i + 1].complete === true)) { joint = i; break }
+  //       }
+  //       for (let i = 0; i < todoList.length; i++) {
+  //         document.querySelector('ul').children[0].children[0].children[i].children[0].children[4].checked = todoList[i].complete;
+  //       }
+  //     }
+  //     var showedDescription = joint + 1;
+  //   }
+  // } catch (e) { console.log("unable to get joint") }
 
   useEffect(() => {
   }, []);
@@ -57,34 +62,36 @@ function Todo() {
       }
       else { document.querySelector('ul').children[0].children[0].children[joint].children[0].children[4].checked = true }
     }
-    if (showedDescription === "")document.querySelector('ul').children[0].children[0].children[taskId].children[0].children[1].click();
-    if (showedDescription === (taskId-1) || showedDescription === (taskId)) {
-      var description = document.getElementById('description-column');
-      showedDescription = joint+1;
-      if (state) {
-        description.children[0].children[2].textContent = "Completed";
-        description.children[0].children[2].classList.replace("has-text-danger", "has-text-success");
-      }
-      else {
-        description.children[0].children[2].textContent = "Not Completed";
-        description.children[0].children[2].classList.replace("has-text-success", "has-text-danger");
-      }
-    }
+    // if (showedDescription === "") document.querySelector('ul').children[0].children[0].children[taskId].children[0].children[1].click();
+    // if (showedDescription === (taskId - 1) || showedDescription === (taskId)) {
+    //   var description = document.getElementById('description-column');
+    //   showedDescription = joint + 1;
+    //   if (state) {
+    //     description.children[0].children[2].textContent = "Completed";
+    //     description.children[0].children[2].classList.replace("has-text-danger", "has-text-success");
+    //   }
+    //   else {
+    //     description.children[0].children[2].textContent = "Not Completed";
+    //     description.children[0].children[2].classList.replace("has-text-success", "has-text-danger");
+    //   }
+    // }
   }
 
   const onClick = (e) => {
     var k = 0;
-    for (let i = 0; i <= 2; i++) {
-      if (e.target.parentElement.children[i].children[1].value === "" ||
-        e.target.parentElement.children[i].children[1].value.trim().length === 0) {
-        var modal = document.getElementById("null");
-        if (i == 0) { setDescription(""); modal.children[0].children[1].children[0].children[1].children[0].textContent = "please enter the task name" }
-        if (i == 1) { setDescription(""); modal.children[0].children[1].children[0].children[1].children[0].textContent = "please enter the task description" }
-        if (i == 2) { setImage(""); modal.children[0].children[1].children[0].children[1].children[0].textContent = "please enter url of the task image" }
-        modal.style.display = "block";
-        return
-      }
-    }
+    e.preventDefault();
+    for (let i = 0; i <= 2; i++)e.target[i].value = ""
+    // for (let i = 0; i <= 2; i++) {
+    //   if (e.target.parentElement.children[i].children[1].value === "" ||
+    //     e.target.parentElement.children[i].children[1].value.trim().length === 0) {
+    //     var modal = document.getElementById("null");
+    //     if (i == 0) { setDescription(""); modal.children[0].children[1].children[0].children[1].children[0].textContent = "please enter the task name" }
+    //     if (i == 1) { setDescription(""); modal.children[0].children[1].children[0].children[1].children[0].textContent = "please enter the task description" }
+    //     if (i == 2) { setImage(""); modal.children[0].children[1].children[0].children[1].children[0].textContent = "please enter url of the task image" }
+    //     modal.style.display = "block";
+    //     return
+    //   }
+    // }
     for (let i = 0; i < todoList.length; i++) {
       if (todoList[i].complete) { k++ } else { k-- }
     }
@@ -102,12 +109,10 @@ function Todo() {
       }
       else { document.querySelector('ul').children[0].children[0].children[joint].children[0].children[4].checked = true }
     }
-    const newTodo = { id: todoList.length + 1, task: name, complete: false, description: description, image: image };
+    const newTodo = { id: todoList.length + 1, task: name, complete: false, description: description, image: image, color: color };
     console.log(newTodo);
     setTodoList([...todoList, newTodo]);
   }
-
-  const preventReload = (e) => { e.preventDefault(); for (let i = 0; i <= 2; i++)e.target[i].value = "" }
 
   const handleChange = (event) => {
     if (event.target.value === "" || event.target.value.trim().length === 0) { setName(""); setDescription(""); setImage(""); return }
@@ -122,17 +127,22 @@ function Todo() {
       case "image":
         setImage(event.target.value);
         break;
+      case "color":
+        setColor(event.target.value);
+        break;
+      default: console.log("something went wrong");
     }
   }
 
   const deleteList = () => {
+    setId(-1);
     document.getElementById("description-column").style.display = "none";
     setTodoList([])
   }
 
   const deleteElement = (e, taskId) => {
     var k = 0;
-    if (taskId === showedDescription) { document.getElementById("description-column").style.display = "none"; console.log("description:" + showedDescription); }
+    // if (taskId === showedDescription) { document.getElementById("description-column").style.display = "none"; console.log("description:" + showedDescription); }
     for (let i = 0; i < todoList.length; i++) todoList[i].id = i + 1
     setTodoList((oldData) => oldData.filter((elem, index) => index !== taskId));
     for (let i = 0; i < todoList.length; i++) {
@@ -158,6 +168,7 @@ function Todo() {
     switch (reason) {
       case "queryAll":
         if (!isQueryDeleteAll) {
+          e.preventDefault();
           var modal = document.getElementById("Delete");
           modal.style.display = "block";
           modal.children[0].children[1].children[0].children[1].children[0].textContent = "do you want to delete all?";
@@ -219,7 +230,7 @@ function Todo() {
     for (let c of todoList) { if (c.id === id) { c.task = input.value; } }
     setTodoList([...todoList]);
     closeModal(e, title);
-    document.querySelector('ul').children[0].children[0].children[id-1].children[0].children[1].click();
+    document.querySelector('ul').children[0].children[0].children[id - 1].children[0].children[1].click();
   }
 
   const sort = (e) => {
@@ -227,25 +238,12 @@ function Todo() {
 
   }
 
-  const showDescription = (e, id) => {
-    showedDescription = id;
+  const showDescription = (e, taskId) => {
 
     var description = document.getElementById("description-column");
     description.style.display = "block";
 
-    description.children[0].children[1].children[0].textContent = todoList[id].task;
-    description.children[0].children[1].children[1].textContent = todoList[id].description;
-    description.children[0].children[0].children[0].children[0].src = todoList[id].image;
-    description.children[0].children[0].children[0].children[0].alt = todoList[id].image + " - its not a link ಠ_ಠ";
-
-    if (todoList[id].complete) {
-      description.children[0].children[2].textContent = "Completed";
-      description.children[0].children[2].classList.replace("has-text-danger", "has-text-success");
-    }
-    else {
-      description.children[0].children[2].textContent = "Not Completed";
-      description.children[0].children[2].classList.replace("has-text-success", "has-text-danger");
-    }
+    setId(taskId);
   }
 
   sort();
@@ -296,54 +294,22 @@ function Todo() {
           </footer>
         </div>
       } /></div>
-      <form className="input-container" onSubmit={preventReload}>
-        <div className="input-box">
-          <label className="label is-normal is-pulled-left">Task</label>
-          <input className="input" type="text" id="name" placeholder="type your task here" onChange={handleChange} />
-        </div>
-        <div className="input-box">
-          <label className="label is-normal is-pulled-left">Task descrition</label>
-          <input className="input" type="text" id="description" placeholder="type the descrition of task here" onChange={handleChange} />
-        </div>
-        <div className="input-box">
-          <label className="label is-normal is-pulled-left">Image</label>
-          <input className="input" type="text" id="image" placeholder="paste the url of image here" onChange={handleChange} />
-        </div>
-        <input className="button is-success" type="submit" value="add" onClick={onClick} />
-        <button className="button is-danger" onClick={(e) => deleteElementModal(e, '-1', "queryAll")}>delete list</button>
-
-        {/* Todo: 3 lines inputs then save and close btn   */}
-      </form>
+      <TaskForm deleteElementModal={deleteElementModal} handleChange={handleChange} onClick={onClick}/>
       <ul>
         <div className="columns">
           <div className="column">
             {todoList.map((task, index) => (
               <li key={index}>
-                <div className={` box ${task.complete ? "has-background-warning is-line-through" : "has-background-success"} `}><span>{index + 1}</span>{"- " + task.task}
-                  <button className="button is-pulled-right is-info" onClick={(e) => showDescription(e, index)}>❔</button>
+                <div className={`box ${task.complete ? "is-disabled is-line-through" : ""} `} style={{backgroundColor: task.color}}><span>{index + 1}</span>{"- " + task.task}
+                  <button className="button is-pulled-right is-info" onClick={(e) => showDescription(e, index)} disabled={task.complete}>❔</button>
                   <button className="button is-pulled-right is-danger" onClick={(e) => deleteElementModal(e, index, "query")}>❌</button>
-                  <button className="button is-pulled-right is-link" onClick={(e) => editElement(e, index)}>🖊</button>
+                  <button className="button is-pulled-right is-link" onClick={(e) => editElement(e, index)} disabled={task.complete}>🖊</button>
                   <input type="checkbox" className="checkbox is-pulled-right is-info" onClick={(e) => updateData(e.target.checked, index)} defaultChecked={task.complete} required />
                 </div>
               </li>
             ))}
           </div>
-          <div className="column box has-background-info description-column" id="description-column">
-            <div className="card">
-              <div className="card-image">
-                <figure className="image is-4by3">
-                  <img src="https://www.modernbathroom.com/blog/image.axd?picture=/7-5-18.jpg" alt="data" />
-                </figure>
-              </div>
-              <div className="card-content">
-                <p className="title is-4">Give dog a bath</p>
-                <div className="content">
-                  Give dog a bath and brush his teeth
-                </div>
-              </div>
-              <div className="card-footer has-text-weight-bold has-text-success">Complete</div>
-            </div>
-          </div>
+          <TaskCard id={id} todoList={todoList} />
         </div>
       </ul>
     </div>
