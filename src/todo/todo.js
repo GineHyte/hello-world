@@ -5,6 +5,7 @@ import TaskForm from './task-form';
 import TaskCard from "./task-card";
 import TodoList_comp from "./task-comp";
 import { useDrag } from 'react-dnd'
+import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
 function Todo() {
   const [id, setId] = useState(-1);
@@ -26,26 +27,44 @@ function Todo() {
   });
   todoList = sortedTodoList;
 
-  const sortStatus = (todoList) => {
-    console.log("todoList", todoList);
-    const sortedTodoList = [[],[],[]];
-      for (let i = 0; i < todoList.length; i++) {
-        for (let j = 0; j < todoList[i].length; j++) {
-          sortedTodoList[todoList[i][j].status].push(todoList[i][j]);
-        }
-      }
-  }
+  // const sortStatus = (todoList) => {
+  //   console.log("todoList", todoList);
+  //   const sortedTodoList = [[],[],[]];
+  //     for (let i = 0; i < todoList.length; i++) {
+  //       for (let j = 0; j < todoList[i].length; j++) {
+  //         sortedTodoList[todoList[i][j].status].push(todoList[i][j]);
+  //       }
+  //     }
+  // }
 
-  const updateData = (taskId, status) => {
-    if(status > -1){
-      for (let j = 0; j < todoList[status].length; j++) {
-        console.log("todoList id: ", todoList[status][j].id, " taskId: ", taskId, " get status: ", status);
-        if (j === taskId) {
-          todoList[status][j].status > 1? todoList[status][j].status = 0 : todoList[status][j].status++; console.log("status chaged!: ", todoList[status][j].status);
-          break;  
-      }}
+  // const updateData = (taskId, status) => {
+  //   if(status > -1){
+  //     for (let j = 0; j < todoList[status].length; j++) {
+  //       console.log("todoList id: ", todoList[status][j].id, " taskId: ", taskId, " get status: ", status);
+  //       if (j === taskId) {
+  //         todoList[status][j].status > 1? todoList[status][j].status = 0 : todoList[status][j].status++; console.log("status chaged!: ", todoList[status][j].status);
+  //         break;  
+  //     }}
+  //   }
+  //   sortStatus(todoList);
+  // }
+
+  const getItemStyle = (isDragging, draggableStyle) => ({
+    userSelect: "none",
+    background: isDragging ? "lightgreen" : "grey",
+  
+    ...draggableStyle
+  });
+
+  const getListStyle = isDraggingOver => ({
+  background: isDraggingOver ? "lightblue" : "lightgrey",
+  });
+
+  const onDragEnd = (res) => {
+    console.log(res)
+    if (!res.destination) {
+      return;
     }
-    sortStatus(todoList);
   }
 
   const onClick = (e) => {
@@ -254,12 +273,12 @@ function Todo() {
         </div>
       } /></div>
       <TaskForm deleteElementModal={deleteElementModal} handleChange={handleChange} onClick={onClick}/>
-      <ul>
-        <TodoList_comp sortStatus={sortStatus} 
+      <DragDropContext onDragEnd={onDragEnd}>
+        <TodoList_comp 
         todoList={todoList} showDescription={showDescription} 
-        deleteElementModal={deleteElementModal} editElement={editElement} updateData={updateData}/>
+        deleteElementModal={deleteElementModal} editElement={editElement} getListStyle={getItemStyle} getItemStyle={getItemStyle}/>
         {/* <TaskCard id={id} todoList={todoList} /> */}
-      </ul>
+      </DragDropContext>
     </div>
   )
 }
