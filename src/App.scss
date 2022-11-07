@@ -25,21 +25,30 @@
         }
     }
     ul{
+
+        .column{padding-bottom: 24px;margin: 15px 10px 0 10px;}
+
         li{
             display: flex;
             margin-top: 10px;
             color:white;
 
-            div{
+            .box{
                 width: -webkit-fill-available;
+                display: flex;
+                justify-content: flex-end;
 
-                
+                span{margin-right: auto;}
+
+                .progress-status{margin-left: 10px;}
+
                 button, input{
                     margin-left: 10px;
                     border-radius: 50%;
                     height: 32px;
                     width: 22px;
                 }
+                
             }
 
             span{

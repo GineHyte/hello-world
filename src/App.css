@@ -22,15 +22,27 @@
   margin-top: 20px;
   margin-left: 10px;
 }
+.block ul .column {
+  padding-bottom: 24px;
+  margin: 15px 10px 0 10px;
+}
 .block ul li {
   display: flex;
   margin-top: 10px;
   color: white;
 }
-.block ul li div {
+.block ul li .box {
   width: -webkit-fill-available;
+  display: flex;
+  justify-content: flex-end;
 }
-.block ul li div button, .block ul li div input {
+.block ul li .box span {
+  margin-right: auto;
+}
+.block ul li .box .progress-status {
+  margin-left: 10px;
+}
+.block ul li .box button, .block ul li .box input {
   margin-left: 10px;
   border-radius: 50%;
   height: 32px;

@@ -3,6 +3,8 @@ import Modal from './modal'
 import data from './data.json';
 import TaskForm from './task-form';
 import TaskCard from "./task-card";
+import TodoList_comp from "./task-comp";
+import { useDrag } from 'react-dnd'
 
 function Todo() {
   const [id, setId] = useState(-1);
@@ -10,88 +12,46 @@ function Todo() {
   const [name, setName] = useState();
   const [description, setDescription] = useState();
   const [image, setImage] = useState();
-  const [todoList, setTodoList] = useState(data);
+  var [todoList, setTodoList] = useState(data);
   var isQueryDelete = false;
   var isQueryDeleteAll = false;
   var deleteIndex = -1;
-  // var k = 0;
-  // var joint = -1;
-  // try {
-  //   if (document.getElementById("description-column").style.display !== "none" || document.getElementById("description-column").style.display !== "") {
-  //     if (Math.abs(k) === todoList.length) { k = -1 } else { k = 1 }
-  //     if (k > -1) {
-  //       for (let i = 0; i < todoList.length; i++) {
-  //         if ((todoList[i].complete === true && todoList[i + 1].complete === false) || (todoList[i].complete === false && todoList[i + 1].complete === true)) { joint = i; break }
-  //       }
-  //       for (let i = 0; i < todoList.length; i++) {
-  //         document.querySelector('ul').children[0].children[0].children[i].children[0].children[4].checked = todoList[i].complete;
-  //       }
-  //     }
-  //     var showedDescription = joint + 1;
-  //   }
-  // } catch (e) { console.log("unable to get joint") }
 
   useEffect(() => {
   }, []);
 
+  let sortedTodoList = [[],[],[]];
+  todoList.map (task => {
+    sortedTodoList[task.status].push(task);
+  });
+  todoList = sortedTodoList;
 
-  const updateData = (state, taskId) => {
-    var k = 0;
-    for (let i = 0; i < todoList.length; i++) {
-      if (todoList[i].complete) { k++ } else { k-- }
-      todoList[i].id = i + 1;
-    }
-    if (Math.abs(k) === todoList.length) { k = -1 } else { k = 1 }
-    taskId = taskId + 1;
-    const todoChecked = todoList.map(obj => {
-      if (obj.id === taskId) {
-        return { ...obj, complete: state };
-      }
-      return obj;
-    });
-    setTodoList(todoChecked);
-    if (k > -1) {
+  const sortStatus = (todoList) => {
+    console.log("todoList", todoList);
+    const sortedTodoList = [[],[],[]];
       for (let i = 0; i < todoList.length; i++) {
-        if ((todoList[i].complete === true && todoList[i + 1].complete === false) || (todoList[i].complete === false && todoList[i + 1].complete === true)) { var joint = i; break }
+        for (let j = 0; j < todoList[i].length; j++) {
+          sortedTodoList[todoList[i][j].status].push(todoList[i][j]);
+        }
       }
-      for (let i = 0; i < todoList.length; i++) {
-        document.querySelector('ul').children[0].children[0].children[i].children[0].children[4].checked = todoList[i].complete;
-      }
-      if (!state) {
-        document.querySelector('ul').children[0].children[0].children[joint + 1].children[0].children[4].checked = false
-      }
-      else { document.querySelector('ul').children[0].children[0].children[joint].children[0].children[4].checked = true }
+  }
+
+  const updateData = (taskId, status) => {
+    if(status > -1){
+      for (let j = 0; j < todoList[status].length; j++) {
+        console.log("todoList id: ", todoList[status][j].id, " taskId: ", taskId, " get status: ", status);
+        if (j === taskId) {
+          todoList[status][j].status > 1? todoList[status][j].status = 0 : todoList[status][j].status++; console.log("status chaged!: ", todoList[status][j].status);
+          break;  
+      }}
     }
-    // if (showedDescription === "") document.querySelector('ul').children[0].children[0].children[taskId].children[0].children[1].click();
-    // if (showedDescription === (taskId - 1) || showedDescription === (taskId)) {
-    //   var description = document.getElementById('description-column');
-    //   showedDescription = joint + 1;
-    //   if (state) {
-    //     description.children[0].children[2].textContent = "Completed";
-    //     description.children[0].children[2].classList.replace("has-text-danger", "has-text-success");
-    //   }
-    //   else {
-    //     description.children[0].children[2].textContent = "Not Completed";
-    //     description.children[0].children[2].classList.replace("has-text-success", "has-text-danger");
-    //   }
-    // }
+    sortStatus(todoList);
   }
 
   const onClick = (e) => {
     var k = 0;
     e.preventDefault();
     for (let i = 0; i <= 2; i++)e.target[i].value = ""
-    // for (let i = 0; i <= 2; i++) {
-    //   if (e.target.parentElement.children[i].children[1].value === "" ||
-    //     e.target.parentElement.children[i].children[1].value.trim().length === 0) {
-    //     var modal = document.getElementById("null");
-    //     if (i == 0) { setDescription(""); modal.children[0].children[1].children[0].children[1].children[0].textContent = "please enter the task name" }
-    //     if (i == 1) { setDescription(""); modal.children[0].children[1].children[0].children[1].children[0].textContent = "please enter the task description" }
-    //     if (i == 2) { setImage(""); modal.children[0].children[1].children[0].children[1].children[0].textContent = "please enter url of the task image" }
-    //     modal.style.display = "block";
-    //     return
-    //   }
-    // }
     for (let i = 0; i < todoList.length; i++) {
       if (todoList[i].complete) { k++ } else { k-- }
     }
@@ -142,7 +102,7 @@ function Todo() {
 
   const deleteElement = (e, taskId) => {
     var k = 0;
-    // if (taskId === showedDescription) { document.getElementById("description-column").style.display = "none"; console.log("description:" + showedDescription); }
+
     for (let i = 0; i < todoList.length; i++) todoList[i].id = i + 1
     setTodoList((oldData) => oldData.filter((elem, index) => index !== taskId));
     for (let i = 0; i < todoList.length; i++) {
@@ -233,10 +193,9 @@ function Todo() {
     document.querySelector('ul').children[0].children[0].children[id - 1].children[0].children[1].click();
   }
 
-  const sort = (e) => {
-    todoList.sort((a, b) => (a.complete > b.complete) ? 1 : -1);
-
-  }
+  // const sort = (e) => {
+  //   todoList.sort((a, b) => (a.complete > b.complete) ? 1 : -1);
+  // }
 
   const showDescription = (e, taskId) => {
 
@@ -246,7 +205,7 @@ function Todo() {
     setId(taskId);
   }
 
-  sort();
+  // sort();
   return (
     <div className="block">
       <div className="edit" id="Edit"><Modal content={
@@ -296,21 +255,10 @@ function Todo() {
       } /></div>
       <TaskForm deleteElementModal={deleteElementModal} handleChange={handleChange} onClick={onClick}/>
       <ul>
-        <div className="columns">
-          <div className="column">
-            {todoList.map((task, index) => (
-              <li key={index}>
-                <div className={`box ${task.complete ? "is-disabled is-line-through" : ""} `} style={{backgroundColor: task.color}}><span>{index + 1}</span>{"- " + task.task}
-                  <button className="button is-pulled-right is-info" onClick={(e) => showDescription(e, index)} disabled={task.complete}>❔</button>
-                  <button className="button is-pulled-right is-danger" onClick={(e) => deleteElementModal(e, index, "query")}>❌</button>
-                  <button className="button is-pulled-right is-link" onClick={(e) => editElement(e, index)} disabled={task.complete}>🖊</button>
-                  <input type="checkbox" className="checkbox is-pulled-right is-info" onClick={(e) => updateData(e.target.checked, index)} defaultChecked={task.complete} required />
-                </div>
-              </li>
-            ))}
-          </div>
-          <TaskCard id={id} todoList={todoList} />
-        </div>
+        <TodoList_comp sortStatus={sortStatus} 
+        todoList={todoList} showDescription={showDescription} 
+        deleteElementModal={deleteElementModal} editElement={editElement} updateData={updateData}/>
+        {/* <TaskCard id={id} todoList={todoList} /> */}
       </ul>
     </div>
   )

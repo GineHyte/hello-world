@@ -11,7 +11,7 @@ const TaskCard = (props) => {
     }
 
     return (
-        <div className="column box description-column" style={{backgroundColor: color}} id="description-column">
+        <div className="column box description-column" style={{backgroundColor: color}} id="description-column" >
             <div className="card">
                 <div className="card-image">
                     <figure className="image is-4by3">
