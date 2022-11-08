@@ -22,50 +22,43 @@
   margin-top: 20px;
   margin-left: 10px;
 }
-.block ul .column {
+.block .columns .column {
   padding-bottom: 24px;
   margin: 15px 10px 0 10px;
 }
-.block ul li {
-  display: flex;
-  margin-top: 10px;
-  color: white;
-}
-.block ul li .box {
+.block .columns .box {
   width: -webkit-fill-available;
-  display: flex;
-  justify-content: flex-end;
 }
-.block ul li .box span {
+.block .columns .box span {
   margin-right: auto;
 }
-.block ul li .box .progress-status {
+.block .columns .box .progress-status {
   margin-left: 10px;
 }
-.block ul li .box button, .block ul li .box input {
+.block .columns .box button, .block .columns .box input {
   margin-left: 10px;
   border-radius: 50%;
   height: 32px;
   width: 22px;
 }
-.block ul li span {
+.block .columns span {
   color: black;
   margin-block: auto;
   margin-inline: 5px;
 }
-.block ul .is-disabled {
+.block .columns .is-disabled {
   background-color: gray !important;
-  opacity: 0.8;
+  opacity: 0.6;
 }
-.block ul .description-column {
+.block .columns .description-column {
   display: none;
   height: 60%;
 }
-.block ul .description-column .card {
+.block .columns .description-column .card {
   box-shadow: 4px 3px 10px 1px rgba(0, 0, 0, 0.51);
   border-radius: 15px;
 }
-.block ul .description-column .card-footer {
+.block .columns .description-column .card-footer {
   padding: 0 0 20px 20px;
 }
 .block .edit, .block .delete, .block .null {

@@ -24,43 +24,33 @@
             margin-left: 10px;
         }
     }
-    ul{
-
+    .columns{
         .column{padding-bottom: 24px;margin: 15px 10px 0 10px;}
+        .box{
+            width: -webkit-fill-available;
 
-        li{
-            display: flex;
-            margin-top: 10px;
-            color:white;
+            span{margin-right: auto;}
 
-            .box{
-                width: -webkit-fill-available;
-                display: flex;
-                justify-content: flex-end;
+            .progress-status{margin-left: 10px;}
 
-                span{margin-right: auto;}
-
-                .progress-status{margin-left: 10px;}
-
-                button, input{
-                    margin-left: 10px;
-                    border-radius: 50%;
-                    height: 32px;
-                    width: 22px;
-                }
-                
+            button, input{
+                margin-left: 10px;
+                border-radius: 50%;
+                height: 32px;
+                width: 22px;
             }
+            
+        }
 
-            span{
-                color: black;
-                margin-block: auto;
-                margin-inline: 5px;
-            }
+        span{
+            color: black;
+            margin-block: auto;
+            margin-inline: 5px; 
         }
 
         .is-disabled{
             background-color: gray !important;
-            opacity: 0.8;
+            opacity: 0.6;
         }
 
         .description-column{

@@ -5,7 +5,7 @@ import TaskForm from './task-form';
 import TaskCard from "./task-card";
 import TodoList_comp from "./task-comp";
 import { useDrag } from 'react-dnd'
-import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+import { DragDropContext} from "react-beautiful-dnd";
 
 function Todo() {
   const [id, setId] = useState(-1);
@@ -21,11 +21,14 @@ function Todo() {
   useEffect(() => {
   }, []);
 
+
+  try {
   let sortedTodoList = [[],[],[]];
   todoList.map (task => {
     sortedTodoList[task.status].push(task);
   });
   todoList = sortedTodoList;
+  } catch (e) {console.log("try to sort todoList failed")}
 
   // const sortStatus = (todoList) => {
   //   console.log("todoList", todoList);
@@ -59,13 +62,6 @@ function Todo() {
   const getListStyle = isDraggingOver => ({
   background: isDraggingOver ? "lightblue" : "lightgrey",
   });
-
-  const onDragEnd = (res) => {
-    console.log(res)
-    if (!res.destination) {
-      return;
-    }
-  }
 
   const onClick = (e) => {
     var k = 0;
@@ -212,6 +208,34 @@ function Todo() {
     document.querySelector('ul').children[0].children[0].children[id - 1].children[0].children[1].click();
   }
 
+  const onDragEnd = (result) => {
+    if (!result.destination) {
+      console.log("destination is null");
+      return;
+    }
+    // console.log("get the result: destinationIndex: " + result.destination.index 
+    //   + " sourceIndex: " + result.source.index
+    //   + " DestDroppableId: " + result.destination.droppableId
+    //   + " SourceDroppableId: " + result.source.droppableId);
+    let sortTodoList = todoList;
+    switch (result.destination.droppableId) {
+        case "open":
+            sortTodoList[0].splice(result.destination.index, 0, 
+              sortTodoList[result.source.droppableId == "open"?0:result.source.droppableId == "in-progress"?1:2].splice(result.source.index, 1)[0]);
+            break
+        case "in-progress":
+            sortTodoList[1].splice(result.destination.index, 0, 
+              sortTodoList[result.source.droppableId == "open"?0:result.source.droppableId == "in-progress"?1:2].splice(result.source.index, 1)[0]);
+            break
+        case "completed":
+            sortTodoList[2].splice(result.destination.index, 0, 
+                sortTodoList[result.source.droppableId == "open"?0:result.source.droppableId == "in-progress"?1:2].splice(result.source.index, 1)[0]);
+            break
+        default:
+            console.log("Something went wrong in onDragEnd");
+    }
+    setTodoList([...sortTodoList]);
+}
   // const sort = (e) => {
   //   todoList.sort((a, b) => (a.complete > b.complete) ? 1 : -1);
   // }
@@ -273,12 +297,11 @@ function Todo() {
         </div>
       } /></div>
       <TaskForm deleteElementModal={deleteElementModal} handleChange={handleChange} onClick={onClick}/>
-      <DragDropContext onDragEnd={onDragEnd}>
-        <TodoList_comp 
-        todoList={todoList} showDescription={showDescription} 
-        deleteElementModal={deleteElementModal} editElement={editElement} getListStyle={getItemStyle} getItemStyle={getItemStyle}/>
-        {/* <TaskCard id={id} todoList={todoList} /> */}
-      </DragDropContext>
+          <TodoList_comp 
+          onDragEnd={onDragEnd}
+          todoList={todoList} showDescription={showDescription} 
+          deleteElementModal={deleteElementModal} editElement={editElement} getListStyle={getItemStyle} getItemStyle={getItemStyle}/>
+          {/* <TaskCard id={id} todoList={todoList} /> */}
     </div>
   )
 }
