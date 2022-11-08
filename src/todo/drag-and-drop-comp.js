@@ -15,7 +15,7 @@ const DnDComp = (props) => {
                     ref={provided.innerRef}
                 >
                     {props.todoList.map((task, index) => (
-                        <Draggable key={task.task} draggableId={task.task} index={index}>
+                        <Draggable key={task.task+task.id} draggableId={task.task+task.id} index={index}>
                             {(provided, snapshot) => (
                                 <div
                                     ref={provided.innerRef}
@@ -27,8 +27,8 @@ const DnDComp = (props) => {
                                     )}>
                                     <div className="box" style={{ backgroundColor: task.color }}><span>{index + 1 + " - " + task.task}</span>
                                         <button className="button is-pulled-right is-info" onClick={(e) => props.showDescription(e, task.id)}>❔</button>
-                                        <button className="button is-pulled-right is-danger" onClick={(e) => props.deleteElementModal(e, index, "query")}>❌</button>
-                                        <button className="button is-pulled-right is-link" onClick={(e) => props.editElement(e, index)}>🖊</button>
+                                        <button className="button is-pulled-right is-danger" onClick={(e) => props.deleteElementModal(e, task.id, "query", props.list)}>❌</button>
+                                        <button className="button is-pulled-right is-link" onClick={(e) => props.editElement(e, index, props.list)}>🖊</button>
                                         <div className="progress-status is-pulled-right is-info">
                                             <img src={props.image} />
                                         </div>

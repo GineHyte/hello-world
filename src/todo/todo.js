@@ -3,19 +3,30 @@ import Modal from './modal'
 import data from './data.json';
 import TaskForm from './task-form';
 import TodoList_comp from "./task-comp";
-
+import {db}  from "../config/firebase";
+import { onValue, ref } from "firebase/database";
 function Todo() {
   const [id, setId] = useState(-1);
   const [color, setColor] = useState();
   const [name, setName] = useState();
   const [description, setDescription] = useState();
   const [image, setImage] = useState();
-  var [todoList, setTodoList] = useState(data);
-  var isQueryDelete = false;
-  var isQueryDeleteAll = false;
-  var deleteIndex = -1;
+  var [todoList, setTodoList] = useState([]);
+  let isQueryDelete = false;
+  let isQueryDeleteAll = false;
+  let ListToDelete, ElementToDelete, ElementToEdit, ListToEdit;
+
 
   useEffect(() => {
+    const query = ref(db, "1");
+    return onValue(query, (snapshot) => {
+      const data = snapshot.val();
+      if (snapshot.exists()) {
+        Object.values(data).map((tasks) => {
+          setTodoList((todoL) => [...todoL, tasks]);
+        });
+      }
+    });
   }, []);
 
 
@@ -25,43 +36,13 @@ function Todo() {
     sortedTodoList[task.status].push(task);
   });
   todoList = sortedTodoList;
-  } catch (e) {console.log("try to sort todoList failed")}
+  } catch (e) {}
 
-  const getItemStyle = (isDragging, draggableStyle) => ({
-    userSelect: "none",
-    background: isDragging ? "lightgreen" : "grey",
-  
-    ...draggableStyle
-  });
-
-  const getListStyle = isDraggingOver => ({
-  background: isDraggingOver ? "lightblue" : "lightgrey",
-  });
-
-  const onClick = (e) => {
-    var k = 0;
+  const addNewTodo = (e) => {
     e.preventDefault();
-    for (let i = 0; i <= 2; i++)e.target[i].value = ""
-    for (let i = 0; i < todoList.length; i++) {
-      if (todoList[i].complete) { k++ } else { k-- }
-    }
-    if (Math.abs(k) === todoList.length || Math.abs(k) === todoList.length) { k = -1 } else { k = 1 }
-    if (k > -1 && todoList.length > 0) {
-      for (let i = 0; i < todoList.length; i++) {
-        if ((todoList[i].complete === true && todoList[i + 1].complete === false) || (todoList[i].complete === false && todoList[i + 1].complete === true)) { var joint = i; break }
-      }
-      for (let i = 0; i < todoList.length; i++) {
-        document.querySelector('ul').children[0].children[0].children[i].children[0].children[4].checked = todoList[i].complete;
-      }
-      var state = false;
-      if (!state) {
-        document.querySelector('ul').children[0].children[0].children[joint + 1].children[0].children[4].checked = false
-      }
-      else { document.querySelector('ul').children[0].children[0].children[joint].children[0].children[4].checked = true }
-    }
-    const newTodo = { id: todoList.length + 1, task: name, complete: false, description: description, image: image, color: color };
-    console.log(newTodo);
-    setTodoList([...todoList, newTodo]);
+    for (let i=0; i<=3; i++) e.target.children[i].children[1].value = "";
+    const newTodo = { id: todoList[0].length + 1, task: name, status: 0, description: description, image: image, color: color };
+    setTodoList([[...todoList[0], newTodo], ...todoList.slice(1)]);
   }
 
   const handleChange = (event) => {
@@ -86,35 +67,16 @@ function Todo() {
 
   const deleteList = () => {
     setId(-1);
-    document.getElementById("description-column").style.display = "none";
+    try {document.getElementsByClassName("card")[0].style.display = "none";}catch(e){}
     setTodoList([])
   }
 
-  const deleteElement = (e, taskId) => {
-    var k = 0;
-
-    for (let i = 0; i < todoList.length; i++) todoList[i].id = i + 1
-    setTodoList((oldData) => oldData.filter((elem, index) => index !== taskId));
-    for (let i = 0; i < todoList.length; i++) {
-      if (todoList[i].complete) { k++ } else { k-- }
-    }
-    if (Math.abs(k) === todoList.length) { k = -1 } else { k = 1 }
-    if (k > -1) {
-      for (let i = 0; i < todoList.length; i++) {
-        if ((todoList[i].complete === true && todoList[i + 1].complete === false) || (todoList[i].complete === false && todoList[i + 1].complete === true)) { var joint = i; break }
-      }
-      for (let i = 0; i < todoList.length; i++) {
-        document.querySelector('ul').children[0].children[0].children[i].children[0].children[4].checked = todoList[i].complete;
-      }
-      var state = true;
-      if (!state) {
-        document.querySelector('ul').children[0].children[0].children[joint + 1].children[0].children[4].checked = false
-      }
-      else { document.querySelector('ul').children[0].children[0].children[joint].children[0].children[4].checked = true }
-    }
+  const deleteElement = (e, taskId, deleteList) => {
+    const todoToDelete = todoList[deleteList];
+    setTodoList([...todoList.slice(0, deleteList), todoToDelete.filter((task) => task.id !== taskId), ...todoList.slice(deleteList+1, todoList.length)]);
   }
 
-  const deleteElementModal = (e, taskId, reason) => {
+  const deleteElementModal = (e, taskId, reason, list) => {
     switch (reason) {
       case "queryAll":
         if (!isQueryDeleteAll) {
@@ -129,9 +91,11 @@ function Todo() {
         if (!isQueryDelete) {
           var modal = document.getElementById("Delete");
           modal.style.display = "block";
-          modal.children[0].children[1].children[0].children[1].children[0].textContent = "do you want to delete " + todoList[taskId].task + "?";
+          modal.children[0].children[1].children[0].children[1].children[0].textContent = "do you want to delete " 
+          + String(todoList.map(taskType =>(taskType.map(task=>(task.id===taskId?task.task:""))))).replace(/,/g,"") + "?";
           isQueryDelete = true;
-          deleteIndex = taskId;
+          ListToDelete = list;
+          ElementToDelete = taskId;
         }
         break;
       case "Accept":
@@ -142,7 +106,7 @@ function Todo() {
           modal.style.display = "none";
           break;
         }
-        deleteElement(e, deleteIndex);
+        deleteElement(e, ElementToDelete, ListToDelete);
         var modal = document.getElementById("Delete");
         modal.style.display = "none";
         isQueryDelete = false;
@@ -157,30 +121,26 @@ function Todo() {
     }
   }
 
-  const editElement = (e, id) => {
-    for (let i = 0; i < todoList.length; i++) {
-      todoList[i].id = i + 1;
-    }
-    setTodoList([...todoList]);
+  const editElement = (e, id, list) => {
+    console.log(todoList[list][id]);
     var modal = document.getElementById("Edit");
     modal.style.display = "block";
-    modal.children[0].children[1].children[0].children[1].children[0].value = todoList[id].task;
-    var btn = modal.children[0].children[1].children[0].children[2].children[0];
-    btn.style.setProperty('--id', id);
+    modal.children[0].children[1].children[0].children[1].children[0].value = todoList[list][id].task;
+    ElementToEdit = todoList[list][id].id;
+    ListToEdit = list;
   }
   const closeModal = (e, title) => {
     var modal = document.getElementById(title);
     modal.style.display = "none";
   }
 
-  const save = (e, title, id) => {
-    id = parseInt(id) + 1;
-    if (id <= -1) { console.log("something went wrong"); return }
+  const save = (e, title) => {
+    if (ElementToEdit <= -1) { console.log("something went wrong"); return }
     var input = e.target.parentElement.parentElement.children[1].children[0];
-    for (let c of todoList) { if (c.id === id) { c.task = input.value; } }
+    const todoToEdit = todoList[ListToEdit];
+    setTodoList([...todoList.slice(0, ElementToEdit), todoToEdit.map((task) => task.id === ElementToEdit?task.task = input.value:task), ...todoList.slice(ElementToEdit+1, todoList.length)]);
     setTodoList([...todoList]);
     closeModal(e, title);
-    document.querySelector('ul').children[0].children[0].children[id - 1].children[0].children[1].click();
   }
 
   const onDragEnd = (result) => {
@@ -233,8 +193,7 @@ function Todo() {
             <input type="text" className="input" />
           </section>
           <footer className="modal-card-foot">
-            {/* onClick={(e)=>save(e,'Edit', getComputedStyle(this.target).getPropertyValue('--id'))} */}
-            <button className="button is-success" onClick={(e) => save(e, 'Edit', getComputedStyle(e.target).getPropertyValue('--id'))}>Save changes</button>
+            <button className="button is-success" onClick={(e) => save(e, 'Edit')}>Save changes</button>
             <button className="button" onClick={(e) => closeModal(e, 'Edit')}>Cancel</button>
           </footer>
         </div>
@@ -268,11 +227,11 @@ function Todo() {
           </footer>
         </div>
       } /></div>
-      <TaskForm deleteElementModal={deleteElementModal} handleChange={handleChange} onClick={onClick}/>
+      <TaskForm deleteElementModal={deleteElementModal} handleChange={handleChange} addNewTodo={addNewTodo}/>
           <TodoList_comp 
           onDragEnd={onDragEnd}
           todoList={todoList} showDescription={showDescription} 
-          deleteElementModal={deleteElementModal} editElement={editElement} getListStyle={getItemStyle} getItemStyle={getItemStyle}/>
+          deleteElementModal={deleteElementModal} editElement={editElement}/>
     </div>
   )
 }

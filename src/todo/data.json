@@ -1,43 +1,45 @@
-[{
-    "id": 1,
-    "task": "Delete button",
-    "status": 0,
-    "description": "Delete button should be red",
-    "image": "https://gcdnb.pbrd.co/images/gxC7XkwDihPP.png?o=1",
-    "color": "#17BEBB"
-  }, {
-    "id": 2,
-    "task": "Remove margin",
-    "status": 0,
-    "description": "Remove margin from top",
-    "image": "https://img001.prntscr.com/file/img001/IzszNeuaQySWqFxXsdSTcg.png",
-    "color": "#EF3E36"
-  }, {
-    "id": 3,
-    "task": "Create file structure",
-    "status": 1,
-    "description": "Create file structure for the project",
-    "image": "https://img001.prntscr.com/file/img001/AwbTAUSsS4CCiODZr9kCPw.png",
-    "color": "#2E282A"
-  }, {
-    "id": 4,
-    "task": "Create a new branch",
-    "status": 2,
-    "description": "Create a new branch for the project",
-    "image": "https://img001.prntscr.com/file/img001/iwGleU1xR9e0noFlLt1A6w.png",
-    "color": "#EDB88B"
-  }, {
-    "id": 5,
-    "task": "Install dependencies",
-    "status": 2,
-    "description": "Use 'npm install' to install dependencies",
-    "image": "https://img001.prntscr.com/file/img001/F839B5y0RNq8vSUZpAba9Q.png",
-    "color": "#FAD8D6"
-  }, {
-    "id": 6,
-    "task": "Download vscode",
-    "status": 1,
-    "description": "You can download vscode from https://code.visualstudio.com/",
-    "image": "https://img001.prntscr.com/file/img001/9OMKJmCjRWGwq_v5WPW9mA.png",
-    "color": "#F6AE2D"
-  }]
+[[ {"name": "John", "age": 30, "city": "New York"} , {"name": "Mike", "age": 27, "city": "Los Angeles"} , {"name": "David", "age": 33, "city": "Chicago"} ],[{
+  "id": 1,
+  "task": "Delete button",
+  "status": 0,
+  "description": "Delete button should be red",
+  "image": "https://gcdnb.pbrd.co/images/gxC7XkwDihPP.png?o=1",
+  "color": "#17BEBB"
+}, {
+  "id": 2,
+  "task": "Remove margin",
+  "status": 0,
+  "description": "Remove margin from top",
+  "image": "https://img001.prntscr.com/file/img001/IzszNeuaQySWqFxXsdSTcg.png",
+  "color": "#EF3E36"
+}, {
+  "id": 3,
+  "task": "Create file structure",
+  "status": 1,
+  "description": "Create file structure for the project",
+  "image": "https://img001.prntscr.com/file/img001/AwbTAUSsS4CCiODZr9kCPw.png",
+  "color": "#2E282A"
+}, {
+  "id": 4,
+  "task": "Create a new branch",
+  "status": 2,
+  "description": "Create a new branch for the project",
+  "image": "https://img001.prntscr.com/file/img001/iwGleU1xR9e0noFlLt1A6w.png",
+  "color": "#EDB88B"
+}, {
+  "id": 5,
+  "task": "Install dependencies",
+  "status": 2,
+  "description": "Use 'npm install' to install dependencies",
+  "image": "https://img001.prntscr.com/file/img001/F839B5y0RNq8vSUZpAba9Q.png",
+  "color": "#FAD8D6"
+}, {
+  "id": 6,
+  "task": "Download vscode",
+  "status": 1,
+  "description": "You can download vscode from https://code.visualstudio.com/",
+  "image": "https://img001.prntscr.com/file/img001/9OMKJmCjRWGwq_v5WPW9mA.png",
+  "color": "#F6AE2D"
+}]]
+
+

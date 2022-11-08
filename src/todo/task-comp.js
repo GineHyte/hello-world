@@ -13,19 +13,19 @@ const TodoList_comp = (props) => {
                     <DnDComp todoList={props.todoList[0]}
                         showDescription={props.showDescription} deleteElementModal={props.deleteElementModal}
                         editElement={props.editElement} updateData={props.updateData} image={openStatus}
-                        droppableId={'open'}/>
+                        droppableId={'open'} list={0}/>
                 </div>
                 <div className='column box has-background-info'>
                     <DnDComp todoList={props.todoList[1]}
                         showDescription={props.showDescription} deleteElementModal={props.deleteElementModal}
                         editElement={props.editElement} updateData={props.updateData} image={inProgressStatus}
-                        droppableId={'in-progress'}/>
+                        droppableId={'in-progress'} list={1}/>
                 </div>
                 <div className='column box has-background-success'>
                     <DnDComp todoList={props.todoList[2]}
                         showDescription={props.showDescription} deleteElementModal={props.deleteElementModal}
                         editElement={props.editElement} updateData={props.updateData} image={completedStatus}
-                        droppableId={'completed'}/>
+                        droppableId={'completed'} list={2}/>
                 </div>
             </div>
         </DragDropContext>

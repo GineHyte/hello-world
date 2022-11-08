@@ -1,7 +1,7 @@
 const TaskFrom = (props) => {
   return (
     <div className='formContainer'>
-        <form className="input-container" onSubmit={props.onClick}>
+        <form className="input-container" onSubmit={props.addNewTodo}>
             <div className="input-box">
             <label className="label is-normal is-pulled-left">Task</label>
             <input className="input" type="text" id="name" placeholder="type your task here" onChange={props.handleChange} required/>
