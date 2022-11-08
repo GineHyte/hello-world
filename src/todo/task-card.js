@@ -1,31 +1,31 @@
 const TaskCard = (props) => {
     let todoList = [];
     let id = props.id;
-    let taskState, image, color = "";
+    let index = props.index;
+    let taskStatus, image, color = "";  
 
-    if (id>-1){
+    if (index>-1){
         todoList = props.todoList;
-        image = todoList[id].image;
-        color = todoList[id].color;
-        taskState = todoList[id].complete? "Completed" : "Not Completed";
+        image = todoList[index].image;
+        color = todoList[index].color;
+        taskStatus = todoList[index].status;
     }
 
     return (
-        <div className="column box description-column" style={{backgroundColor: color}} id="description-column" >
-            <div className="card">
-                <div className="card-image">
-                    <figure className="image is-4by3">
-                        <img src={image} alt={`${image} : it is not image `}/>
-                    </figure>
-                </div>
-                <div className="card-content">
-                    <p className="title is-4">{id>-1?todoList[id].task:""}</p>
-                    <div className="content">
-                    {id>-1?todoList[id].description:""}
-                    </div>
-                </div>
-                <div className={`card-footer has-text-weight-bold ${taskState?"has-text-success":"has-text-danger"}`}>{taskState}</div>
+        <div className="card" id={"description-" + id} style={{backgroundColor:color}}>
+            <div className="card-image">
+                <figure className="image is-4by3">
+                    <img src={image} alt={`${image} : it is not image `}/>
+                </figure>
             </div>
+            <div className="card-content">
+                <p className="title is-4">{id>-1?todoList[index].task:""}</p>
+                <div className="content">
+                {index>-1?todoList[index].description:""}
+                </div>
+            </div>
+            <div className={`card-footer task-status has-text-weight-bold ${taskStatus == 0?"has-text-warning":taskStatus==1?"has-text-info":"has-text-success"}`}>
+            {taskStatus == 0?"Open":taskStatus==1?"In progress":"Done"}</div>
         </div>
     )
 }

@@ -28,6 +28,7 @@
 }
 .block .columns .box {
   width: -webkit-fill-available;
+  margin-bottom: 10px;
 }
 .block .columns .box span {
   margin-right: auto;
@@ -50,15 +51,12 @@
   background-color: gray !important;
   opacity: 0.6;
 }
-.block .columns .description-column {
+.block .columns .card {
   display: none;
-  height: 60%;
-}
-.block .columns .description-column .card {
   box-shadow: 4px 3px 10px 1px rgba(0, 0, 0, 0.51);
   border-radius: 15px;
 }
-.block .columns .description-column .card-footer {
+.block .columns .card .card-footer {
   padding: 0 0 20px 20px;
 }
 .block .edit, .block .delete, .block .null {

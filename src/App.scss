@@ -28,6 +28,7 @@
         .column{padding-bottom: 24px;margin: 15px 10px 0 10px;}
         .box{
             width: -webkit-fill-available;
+            margin-bottom: 10px;
 
             span{margin-right: auto;}
 
@@ -52,16 +53,11 @@
             background-color: gray !important;
             opacity: 0.6;
         }
-
-        .description-column{
+        .card{
             display: none;
-            height: 60%;
-
-            .card{
-                box-shadow: 4px 3px 10px 1px rgba(0,0,0,0.51);
-                border-radius: 15px;
-            }
-
+            box-shadow: 4px 3px 10px 1px rgba(0,0,0,0.51);
+            border-radius: 15px;
+            
             .card-footer{
                 padding: 0 0 20px 20px;
             }

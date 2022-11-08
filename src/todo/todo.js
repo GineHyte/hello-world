@@ -2,10 +2,7 @@ import { useEffect, useState } from "react";
 import Modal from './modal'
 import data from './data.json';
 import TaskForm from './task-form';
-import TaskCard from "./task-card";
 import TodoList_comp from "./task-comp";
-import { useDrag } from 'react-dnd'
-import { DragDropContext} from "react-beautiful-dnd";
 
 function Todo() {
   const [id, setId] = useState(-1);
@@ -29,28 +26,6 @@ function Todo() {
   });
   todoList = sortedTodoList;
   } catch (e) {console.log("try to sort todoList failed")}
-
-  // const sortStatus = (todoList) => {
-  //   console.log("todoList", todoList);
-  //   const sortedTodoList = [[],[],[]];
-  //     for (let i = 0; i < todoList.length; i++) {
-  //       for (let j = 0; j < todoList[i].length; j++) {
-  //         sortedTodoList[todoList[i][j].status].push(todoList[i][j]);
-  //       }
-  //     }
-  // }
-
-  // const updateData = (taskId, status) => {
-  //   if(status > -1){
-  //     for (let j = 0; j < todoList[status].length; j++) {
-  //       console.log("todoList id: ", todoList[status][j].id, " taskId: ", taskId, " get status: ", status);
-  //       if (j === taskId) {
-  //         todoList[status][j].status > 1? todoList[status][j].status = 0 : todoList[status][j].status++; console.log("status chaged!: ", todoList[status][j].status);
-  //         break;  
-  //     }}
-  //   }
-  //   sortStatus(todoList);
-  // }
 
   const getItemStyle = (isDragging, draggableStyle) => ({
     userSelect: "none",
@@ -213,10 +188,6 @@ function Todo() {
       console.log("destination is null");
       return;
     }
-    // console.log("get the result: destinationIndex: " + result.destination.index 
-    //   + " sourceIndex: " + result.source.index
-    //   + " DestDroppableId: " + result.destination.droppableId
-    //   + " SourceDroppableId: " + result.source.droppableId);
     let sortTodoList = todoList;
     switch (result.destination.droppableId) {
         case "open":
@@ -236,19 +207,20 @@ function Todo() {
     }
     setTodoList([...sortTodoList]);
 }
-  // const sort = (e) => {
-  //   todoList.sort((a, b) => (a.complete > b.complete) ? 1 : -1);
-  // }
-
   const showDescription = (e, taskId) => {
 
-    var description = document.getElementById("description-column");
-    description.style.display = "block";
+    var description = document.getElementById("description-"+taskId);
 
-    setId(taskId);
+    if (description.style.display === "none") {
+      e.target.parentElement.style.marginBottom = "0px";
+      description.style.display = "block";
+    }
+    else {
+      e.target.parentElement.style.marginBottom = "10px";
+      description.style.display = "none";
+    }
   }
 
-  // sort();
   return (
     <div className="block">
       <div className="edit" id="Edit"><Modal content={
@@ -301,7 +273,6 @@ function Todo() {
           onDragEnd={onDragEnd}
           todoList={todoList} showDescription={showDescription} 
           deleteElementModal={deleteElementModal} editElement={editElement} getListStyle={getItemStyle} getItemStyle={getItemStyle}/>
-          {/* <TaskCard id={id} todoList={todoList} /> */}
     </div>
   )
 }
