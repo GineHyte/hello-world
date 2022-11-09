@@ -1,0 +1,78 @@
+[
+  [
+    {
+      "name": "John", 
+      "age": 30, 
+      "city": "New York"
+    }, {
+      "name": "Mike", 
+      "age": 27, 
+      "city": "Los Angeles"
+    }, {
+      "name": "David", 
+      "age": 33, 
+      "city": "Chicago"
+    }, {
+      "name": "Richard", 
+      "age": 31, 
+      "city": "Houston"
+    }, {
+      "name": "Susan", 
+      "age": 25, 
+      "city": "Philadelphia"
+    }
+], [
+      {
+          "color": "#17BEBB",
+          "description": "Delete button should be red",
+          "id": 1,
+          "image": "https://gcdnb.pbrd.co/images/gxC7XkwDihPP.png?o=1",
+          "status": 0,
+          "task": "Delete button"
+      },
+      {
+          "color": "#EF3E36",
+          "description": "Remove margin from top",
+          "employee": 1,
+          "id": 2,
+          "image": "https://img001.prntscr.com/file/img001/IzszNeuaQySWqFxXsdSTcg.png",
+          "row": 1,
+          "status": 0,
+          "task": "Remove margin"
+      },
+      {
+          "color": "#2E282A",
+          "description": "Create file structure for the project",
+          "id": 3,
+          "image": "https://img001.prntscr.com/file/img001/AwbTAUSsS4CCiODZr9kCPw.png",
+          "status": 1,
+          "task": "Create file structure"
+      },
+      {
+          "color": "#F6AE2D",
+          "description": "You can download vscode from https://code.visualstudio.com/",
+          "id": 6,
+          "image": "https://img001.prntscr.com/file/img001/9OMKJmCjRWGwq_v5WPW9mA.png",
+          "status": 1,
+          "task": "Download vscode"
+      },
+      {
+          "color": "#EDB88B",
+          "description": "Create a new branch for the project",
+          "id": 4,
+          "image": "https://img001.prntscr.com/file/img001/iwGleU1xR9e0noFlLt1A6w.png",
+          "status": 2,
+          "task": "Create a new branch"
+      },
+      {
+          "color": "#FAD8D6",
+          "description": "Use 'npm install' to install dependencies",
+          "id": 5,
+          "image": "https://img001.prntscr.com/file/img001/F839B5y0RNq8vSUZpAba9Q.png",
+          "status": 2,
+          "task": "Install dependencies"
+      }
+  ]
+]
+
+

@@ -1,4 +1,10 @@
+import { useEffect } from "react";
+
 const TaskFrom = (props) => {
+  useEffect(() => {
+    document.getElementById("color").value = "#C8C8C8";
+  }, []);
+
   return (
     <div className='formContainer'>
         <form className="input-container" onSubmit={props.addNewTodo}>

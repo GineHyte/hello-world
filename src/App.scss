@@ -57,20 +57,34 @@
             display: none;
             box-shadow: 4px 3px 10px 1px rgba(0,0,0,0.51);
             border-radius: 15px;
-            
+
+            .drop-down-btn{
+                right: 0;
+                width: 200px;
+            }
+
+            .dropdown-menu{display: none;}
+
             .card-footer{
                 padding: 0 0 20px 20px;
             }
+            .media-content{
+                p{margin: 5px 0 5px 0;}
+            }
         }
     }
-    .edit, .delete, .null{display: none;}
-    .edit{--id:-1;}
+    .editModal, .deleteModal, .nullModal{display: none;}
+    .editModal{--id:-1;}
 }
 
 .modal{
     p{font-size: 24px;}
     opacity: 1;
     transition: opacity 300ms ease-in-out;
+
+    .modal-background{
+        cursor:auto;
+    }
 }
 
 .is-line-through{text-decoration: line-through;}
