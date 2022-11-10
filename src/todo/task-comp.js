@@ -15,7 +15,7 @@ const TodoList_comp = (props) => {
                         showDescription={props.showDescription} deleteElementModal={props.deleteElementModal}
                         editElement={props.editElement} updateData={props.updateData} image={openStatus}
                         droppableId={'open'} list={0} employeeList={props.employeeList}
-                        chooseEmployee={props.chooseEmployee}/>
+                        chooseEmployee={props.chooseEmployee} saveComment={props.saveComment} closeModal={props.closeModal}/>
                 </div>
                 <div className='column box has-background-info'>
                     <p className='title is-4'>In progress</p>
@@ -23,7 +23,7 @@ const TodoList_comp = (props) => {
                         showDescription={props.showDescription} deleteElementModal={props.deleteElementModal}
                         editElement={props.editElement} updateData={props.updateData} image={inProgressStatus}
                         droppableId={'in-progress'} list={1} employeeList={props.employeeList}
-                        chooseEmployee={props.chooseEmployee}/>
+                        chooseEmployee={props.chooseEmployee} saveComment={props.saveComment} closeModal={props.closeModal}/>
                 </div>
                 <div className='column box has-background-success'>
                     <p className='title is-4'>Success</p>
@@ -31,7 +31,7 @@ const TodoList_comp = (props) => {
                         showDescription={props.showDescription} deleteElementModal={props.deleteElementModal}
                         editElement={props.editElement} updateData={props.updateData} image={completedStatus}
                         droppableId={'completed'} list={2} employeeList={props.employeeList}
-                        chooseEmployee={props.chooseEmployee}/>
+                        chooseEmployee={props.chooseEmployee} saveComment={props.saveComment} closeModal={props.closeModal}/>
                 </div>
             </div>
         </DragDropContext>

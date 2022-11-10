@@ -36,7 +36,7 @@
 .block .columns .box .progress-status {
   margin-left: 10px;
 }
-.block .columns .box button, .block .columns .box input {
+.block .columns .box button.is-pulled-right, .block .columns .box input[type=submit] {
   margin-left: 10px;
   border-radius: 50%;
   height: 32px;
@@ -60,10 +60,23 @@
   right: 0;
   width: 200px;
 }
+.block .columns .card .comment-buttons {
+  display: none;
+  justify-content: flex-end;
+  margin-top: 10px;
+}
+.block .columns .card .comment-buttons button {
+  margin-left: 10px;
+}
+.block .columns .card .comments-inputs {
+  margin-block: 10px;
+}
 .block .columns .card .dropdown-menu {
   display: none;
 }
 .block .columns .card .card-footer {
+  -webkit-text-stroke: 1px rgb(0, 0, 0);
+  font-size: 24px;
   padding: 0 0 20px 20px;
 }
 .block .columns .card .media-content p {

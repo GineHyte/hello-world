@@ -21,24 +21,21 @@ function Todo() {
   useEffect(() => {
     const query = ref(db);
     return onValue(query, (snapshot) => {
-      const data = snapshot.val();
+      let data = snapshot.val();
       if (snapshot.exists()) {
-        console.log("get todoList", data[1]);
+        if (data[1] === undefined) { data.push({}) }
+        let dataTemp = [[], [], []];
+        let listExists = Object.keys(data[1]);
+        data[1] = Object.values(data[1]);
+        for (let i = 0; i < listExists.length; i++) { dataTemp[parseInt(listExists[i])] = data[1][i]; }
+        data[1] = dataTemp;
         setTodoList(data[1]);
-        console.log("get employeeList", data[0]);
         setEmployeeList(data[0]);
       }
     });
   }, []);
 
 
-  try {
-    let sortedTodoList = [[], [], []];
-    todoList.map(task => {
-      sortedTodoList[task.status].push(task);
-    });
-    todoList = sortedTodoList;
-  } catch (e) { }
 
   // function checkForSameId(todoList) {
   //   let maxId = -1;
@@ -58,24 +55,24 @@ function Todo() {
   //   });
   //   setTodoList([...checkedTodoList]);
   // }
+
   async function writeData(color, description, id, image, status, task) {
     let maxId = -1;
     todoList.map((taskList) => (taskList.map((task) => (maxId = Math.max(maxId, task.id)))));
     console.log("maxId", maxId);
     const db = getDatabase();
     await set(ref(db, "1/" + status + "/" + id), {
-      employeeId: 0,
       color: color,
       description: description,
       id: maxId + 1,
       image: image,
       status: status,
       task: task,
+      comment: ""
     });
   }
 
   async function updateFullList(todoList) {
-    console.log("updateFullList", todoList);
     const db = getDatabase();
     for (let i = 0; i < todoList.length; i++) {
       await update(ref(db, "1"), {
@@ -204,22 +201,38 @@ function Todo() {
     setTodoList([...todoList.slice(0, ElementToEdit), todoToEdit.map((task) => task.id === ElementToEdit ? task.task = input.value : task), ...todoList.slice(ElementToEdit + 1, todoList.length)]);
     setTodoList([...todoList]);
     updateFullList(todoList);
-    // updateData(todoList[ListToEdit][ElementToEdit-1].color, 
-    //           todoList[ListToEdit][ElementToEdit-1].description, 
-    //           todoList[ListToEdit][ElementToEdit-1].id, 
-    //           todoList[ListToEdit][ElementToEdit-1].image, 
-    //           todoList[ListToEdit][ElementToEdit-1].status, 
-    //           todoList[ListToEdit][ElementToEdit-1].task);
     closeModal(e, title);
   }
 
+  const saveComment = (e, list, id, comment) => {
+    e.preventDefault();
+    var modal = document.getElementById("nullModal");
+    modal.style.display = "block";
+    console.log("comment", comment);
+    const todoToEdit = todoList[list];
+    let oldComments = [];
+    for(let i=0; i< todoToEdit.length; i++) if(todoToEdit[i].id === id) oldComments = todoToEdit[i].comments;
+    console.log("oldComment", oldComments);
+    let objComment = { id: oldComments === undefined?1:oldComments[oldComments.length-1].id+1, comment: comment };
+    console.log("objComment", objComment);  
+    setTodoList([...todoList.slice(0, list), 
+      todoToEdit.map((task) => {if(task.id === id){  if(task.comments!==undefined) {task.comments.push(objComment);console.log(task)}
+      else{task = Object.assign(task,{"comments": []});console.log(task);task.comments.push(objComment)}}
+      else{return task}}),
+     ...todoList.slice(list + 1, todoList.length)]);
+    setTodoList([...todoList]);
+    updateFullList(todoList);
+    document.getElementById("comment-input" + id).value = "";
+    document.getElementById("comment-buttons" + id).style.display = "none";
+  }
   function onDragEnd(result) {
     if (!result.destination) {
       console.log("destination is null");
       return;
     }
     let sortTodoList = todoList;
-    for (let i = 0; i <= 2; i++) if (!sortTodoList[i]) sortTodoList[i] = [];
+
+    for (let i = 0; i <= 2; i++) if (sortTodoList[i] === undefined) sortTodoList[i] = [];
     let destList = result.destination.droppableId == "open" ? 0 : result.destination.droppableId == "in-progress" ? 1 : 2
     let sourceList = result.source.droppableId == "open" ? 0 : result.source.droppableId == "in-progress" ? 1 : 2
 
@@ -277,26 +290,13 @@ function Todo() {
           </footer>
         </div>
       } /></div>
-      <div className="nullModal" id="nullModal"><Modal closeModal={closeModal} title={'nullModal'} content={
-        <div>
-          <header className="modal-card-head">
-            <p className="modal-card-title is-warning">Warning</p>
-            <button className="delete" onClick={(e) => closeModal(e, 'nullModal')} aria-label="close"></button>
-          </header>
-          <section className="modal-card-body">
-            <p>please enter a task</p>
-          </section>
-          <footer className="modal-card-foot">
-            <button className="button" onClick={(e) => closeModal(e, 'nullModal')}>Close</button>
-          </footer>
-        </div>
-      } /></div>
       <TaskForm deleteElementModal={deleteElementModal} handleChange={handleChange} addNewTodo={addNewTodo} />
       <TodoList_comp
         onDragEnd={onDragEnd}
         todoList={todoList} showDescription={showDescription}
         deleteElementModal={deleteElementModal} editElement={editElement}
-        employeeList={employeeList} chooseEmployee={chooseEmployee} />
+        employeeList={employeeList} chooseEmployee={chooseEmployee} saveComment={saveComment} 
+        closeModal={closeModal}/>
     </div>
   )
 
