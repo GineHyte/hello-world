@@ -24,67 +24,83 @@
             margin-left: 10px;
         }
     }
-    ul{
-
+    .columns{
         .column{padding-bottom: 24px;margin: 15px 10px 0 10px;}
+        .box{
+            width: -webkit-fill-available;
+            margin-bottom: 10px;
 
-        li{
-            display: flex;
-            margin-top: 10px;
-            color:white;
+            span{margin-right: auto;}
 
-            .box{
-                width: -webkit-fill-available;
-                display: flex;
-                justify-content: flex-end;
+            .progress-status{margin-left: 10px;}
 
-                span{margin-right: auto;}
-
-                .progress-status{margin-left: 10px;}
-
-                button, input{
-                    margin-left: 10px;
-                    border-radius: 50%;
-                    height: 32px;
-                    width: 22px;
-                }
-                
+            button.is-pulled-right, input[type="submit"]{
+                margin-left: 10px;
+                border-radius: 50%;
+                height: 32px;
+                width: 22px;
             }
+            
+        }
 
-            span{
-                color: black;
-                margin-block: auto;
-                margin-inline: 5px;
-            }
+        span{
+            color: black;
+            margin-block: auto;
+            margin-inline: 5px; 
         }
 
         .is-disabled{
             background-color: gray !important;
-            opacity: 0.8;
+            opacity: 0.6;
         }
-
-        .description-column{
+        .card{
             display: none;
-            height: 60%;
+            box-shadow: 4px 3px 10px 1px rgba(0,0,0,0.51);
+            border-radius: 15px;
 
-            .card{
-                box-shadow: 4px 3px 10px 1px rgba(0,0,0,0.51);
-                border-radius: 15px;
+            .drop-down-btn{
+                right: 0;
+                width: 200px;
             }
 
+            .comment-buttons{
+                display: none;
+                justify-content: flex-end;
+                margin-top: 10px;
+
+                button{
+                    margin-left: 10px;
+                }
+            }
+
+            .comments-inputs{
+                margin-block: 10px;
+            }
+
+            .dropdown-menu{display: none;}
+
             .card-footer{
+                -webkit-text-stroke: 1px rgb(0, 0, 0);
+                font-size: 24px;
                 padding: 0 0 20px 20px;
+            }
+            .media-content{
+                p{margin: 5px 0 5px 0;}
             }
         }
     }
-    .edit, .delete, .null{display: none;}
-    .edit{--id:-1;}
+    .editModal, .deleteModal, .nullModal{display: none;}
+    .editModal{--id:-1;}
 }
 
 .modal{
     p{font-size: 24px;}
     opacity: 1;
     transition: opacity 300ms ease-in-out;
+
+    .modal-background{
+        cursor:auto;
+    }
 }
 
 .is-line-through{text-decoration: line-through;}

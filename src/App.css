@@ -22,56 +22,70 @@
   margin-top: 20px;
   margin-left: 10px;
 }
-.block ul .column {
+.block .columns .column {
   padding-bottom: 24px;
   margin: 15px 10px 0 10px;
 }
-.block ul li {
-  display: flex;
-  margin-top: 10px;
-  color: white;
-}
-.block ul li .box {
+.block .columns .box {
   width: -webkit-fill-available;
-  display: flex;
-  justify-content: flex-end;
+  margin-bottom: 10px;
 }
-.block ul li .box span {
+.block .columns .box span {
   margin-right: auto;
 }
-.block ul li .box .progress-status {
+.block .columns .box .progress-status {
   margin-left: 10px;
 }
-.block ul li .box button, .block ul li .box input {
+.block .columns .box button.is-pulled-right, .block .columns .box input[type=submit] {
   margin-left: 10px;
   border-radius: 50%;
   height: 32px;
   width: 22px;
 }
-.block ul li span {
+.block .columns span {
   color: black;
   margin-block: auto;
   margin-inline: 5px;
 }
-.block ul .is-disabled {
+.block .columns .is-disabled {
   background-color: gray !important;
-  opacity: 0.8;
+  opacity: 0.6;
 }
-.block ul .description-column {
+.block .columns .card {
   display: none;
-  height: 60%;
-}
-.block ul .description-column .card {
   box-shadow: 4px 3px 10px 1px rgba(0, 0, 0, 0.51);
   border-radius: 15px;
 }
-.block ul .description-column .card-footer {
-  padding: 0 0 20px 20px;
+.block .columns .card .drop-down-btn {
+  right: 0;
+  width: 200px;
 }
-.block .edit, .block .delete, .block .null {
+.block .columns .card .comment-buttons {
+  display: none;
+  justify-content: flex-end;
+  margin-top: 10px;
+}
+.block .columns .card .comment-buttons button {
+  margin-left: 10px;
+}
+.block .columns .card .comments-inputs {
+  margin-block: 10px;
+}
+.block .columns .card .dropdown-menu {
   display: none;
 }
-.block .edit {
+.block .columns .card .card-footer {
+  -webkit-text-stroke: 1px rgb(0, 0, 0);
+  font-size: 24px;
+  padding: 0 0 20px 20px;
+}
+.block .columns .card .media-content p {
+  margin: 5px 0 5px 0;
+}
+.block .editModal, .block .deleteModal, .block .nullModal {
+  display: none;
+}
+.block .editModal {
   --id:-1;
 }
 
@@ -81,6 +95,9 @@
 }
 .modal p {
   font-size: 24px;
+}
+.modal .modal-background {
+  cursor: auto;
 }
 
 .is-line-through {
