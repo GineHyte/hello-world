@@ -54,8 +54,7 @@ const DnDComp = (props) => {
                                     </div>
                                     <TaskCard id={task.id} index={index} todoList={props.todoList} 
                                     chooseEmployee={props.chooseEmployee} employeeList={props.employeeList}
-                                    list={props.list} saveComment={props.saveComment} wc_hex_is_light={wc_hex_is_light}
-                                    closeModal={props.closeModal}/>
+                                    list={props.list} saveComment={props.saveComment} wc_hex_is_light={wc_hex_is_light}/>
                                 </div>
                             )}
 

@@ -40,20 +40,6 @@ const TaskCard = (props) => {
 
     return (
         <div className="card" id={"description-" + id} style={{ backgroundColor: color }}>
-            <div className="nullModal" id="nullModal"><Modal closeModal={props.closeModal} title={'nullModal'} content={
-                <div>
-                <header className="modal-card-head">
-                    <p className="modal-card-title">Info</p>
-                    <button className="delete" onClick={(e) => props.closeModal(e, 'nullModal')} aria-label="close"></button>
-                </header>
-                <section className="modal-card-body">
-                    <p>Comment saved!</p>
-                </section>
-                <footer className="modal-card-foot">
-                    <button className="button" onClick={(e) => props.closeModal(e, 'nullModal')}>Close</button>
-                </footer>
-                </div>
-            } /></div>
             <div className="card-image">
                 <figure className="image is-4by3">
                     <img src={image} alt={`${image} : it is not image `} />

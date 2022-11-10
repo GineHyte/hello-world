@@ -290,13 +290,26 @@ function Todo() {
           </footer>
         </div>
       } /></div>
+            <div className="nullModal" id="nullModal"><Modal closeModal={closeModal} title={'nullModal'} content={
+          <div>
+          <header className="modal-card-head">
+              <p className="modal-card-title">Info</p>
+              <button className="delete" onClick={(e) => closeModal(e, 'nullModal')} aria-label="close"></button>
+          </header>
+          <section className="modal-card-body">
+              <p>Comment saved!</p>
+          </section>
+          <footer className="modal-card-foot">
+              <button className="button" onClick={(e) => closeModal(e, 'nullModal')}>Close</button>
+          </footer>
+          </div>
+      } /></div>
       <TaskForm deleteElementModal={deleteElementModal} handleChange={handleChange} addNewTodo={addNewTodo} />
       <TodoList_comp
         onDragEnd={onDragEnd}
         todoList={todoList} showDescription={showDescription}
         deleteElementModal={deleteElementModal} editElement={editElement}
-        employeeList={employeeList} chooseEmployee={chooseEmployee} saveComment={saveComment} 
-        closeModal={closeModal}/>
+        employeeList={employeeList} chooseEmployee={chooseEmployee} saveComment={saveComment} />
     </div>
   )
 
