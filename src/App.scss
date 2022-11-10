@@ -34,7 +34,7 @@
 
             .progress-status{margin-left: 10px;}
 
-            button.is-pulled-right, input[type="submit"]{
+            button, input{
                 margin-left: 10px;
                 border-radius: 50%;
                 height: 32px;
@@ -63,25 +63,9 @@
                 width: 200px;
             }
 
-            .comment-buttons{
-                display: none;
-                justify-content: flex-end;
-                margin-top: 10px;
-
-                button{
-                    margin-left: 10px;
-                }
-            }
-
-            .comments-inputs{
-                margin-block: 10px;
-            }
-
             .dropdown-menu{display: none;}
 
             .card-footer{
-                -webkit-text-stroke: 1px rgb(0, 0, 0);
-                font-size: 24px;
                 padding: 0 0 20px 20px;
             }
             .media-content{

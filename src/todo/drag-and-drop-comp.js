@@ -9,16 +9,6 @@ const DnDComp = (props) => {
         userSelect: "none",
         ...draggableStyle
     });
-
-    function wc_hex_is_light(color) {
-        const hex = color.replace('#', '');
-        const c_r = parseInt(hex.substring(0, 0 + 2), 16);
-        const c_g = parseInt(hex.substring(2, 2 + 2), 16);
-        const c_b = parseInt(hex.substring(4, 4 + 2), 16);
-        const brightness = ((c_r * 299) + (c_g * 587) + (c_b * 114)) / 1000;
-        return brightness > 155;
-    }
-
     return (
         <Droppable droppableId={props.droppableId}>
             {(provided, snapshot) => (
@@ -37,8 +27,7 @@ const DnDComp = (props) => {
                                         snapshot.isDragging,
                                         provided.draggableProps.style
                                     )}>
-                                    <div className="box" style={{ backgroundColor: task.color }}>
-                                        <span style={{color: wc_hex_is_light(task.color)?"#000000":"#FFFFFF"}}>{index + 1 + " - " + task.task}</span>
+                                    <div className="box" style={{ backgroundColor: task.color }}><span>{index + 1 + " - " + task.task}</span>
                                         <button className="button is-pulled-right is-info" onClick={(e) => props.showDescription(e, task.id)}>
                                             <FontAwesomeIcon icon={icon({name: 'info', style: 'solid'})} /> 
                                         </button>
@@ -54,8 +43,7 @@ const DnDComp = (props) => {
                                     </div>
                                     <TaskCard id={task.id} index={index} todoList={props.todoList} 
                                     chooseEmployee={props.chooseEmployee} employeeList={props.employeeList}
-                                    list={props.list} saveComment={props.saveComment} wc_hex_is_light={wc_hex_is_light}
-                                    closeModal={props.closeModal}/>
+                                    list={props.list}/>
                                 </div>
                             )}
 
