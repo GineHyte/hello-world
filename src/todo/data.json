@@ -1,71 +1,69 @@
-[
-  [
-    {
+{
+  "employeeList": {
+    "John": {
       "id": "3zB6PKuzIdVWa513jTYJTFod",
-      "name": "John", 
       "phone": "+491234567890",
       "email": "John@example.com",
       "jobTitle": "CEO",
-      "age": 30, 
+      "age": 30,
       "city": "New York"
-    }, {
+    },
+    "Mike": {
       "id": "Q624CRaIU4gGzbCOPq7Hkk01",
-      "name": "Mike", 
       "phone": "+491234567891",
       "email": "Mike@example.com",
       "jobTitle": "CTO",
-      "age": 27, 
+      "age": 27,
       "city": "Los Angeles"
-    }, {
+    },
+    "David": {
       "id": "tmHD2qncP2K9Pc9klR27Fj0o",
-      "name": "David", 
       "phone": "+491234567892",
       "email": "David@example.com",
       "jobTitle": "CFO",
-      "age": 33, 
+      "age": 33,
       "city": "Chicago"
-    }, {
+    },
+    "Richard": {
       "id": "q1pvFFpA56C187w4NS9aztWR",
-      "name": "Richard",
-      "phone": "+491234567893", 
+      "phone": "+491234567893",
       "email": "Richard@example.com",
       "jobTitle": "CMO",
-      "age": 31, 
+      "age": 31,
       "city": "Houston"
-    }, {
+    },
+    "Susan": {
       "id": "bf3jSaNSf5N9jrCSlZwwP0qd",
-      "name": "Susan", 
       "phone": "+491234567894",
       "email": "Susan@example.com",
       "jobTitle": "COO",
-      "age": 25, 
+      "age": 25,
       "city": "Philadelphia"
     }
-], [
-    [
-      {
+  },
+  "todoList": {
+    "open": {
+      "1": {
         "employeeId": "3zB6PKuzIdVWa513jTYJTFod",
         "color": "#17BEBB",
         "description": "Delete button should be red",
-        "id": 1,
         "image": "https://gcdnb.pbrd.co/images/gxC7XkwDihPP.png?o=1",
         "status": 0,
         "task": "Delete button",
         "comments": []
       },
-      {
+      "2": {
         "employeeId": "Q624CRaIU4gGzbCOPq7Hkk01",
         "color": "#EF3E36",
         "description": "Remove margin from top",
-        "id": 2,
         "image": "https://img001.prntscr.com/file/img001/IzszNeuaQySWqFxXsdSTcg.png",
         "status": 0,
         "task": "Remove margin",
         "comments": []
       }
-  ],
-  [
-      {  
+    },
+    "in-progress": {
+      "3": {
         "employeeId": "3zB6PKuzIdVWa513jTYJTFod",
         "color": "#2E282A",
         "description": "Create file structure for the project",
@@ -75,7 +73,7 @@
         "task": "Create file structure",
         "comments": []
       },
-      {
+      "4": {
         "employeeId": "Q624CRaIU4gGzbCOPq7Hkk01",
         "color": "#F6AE2D",
         "description": "You can download vscode from https://code.visualstudio.com/",
@@ -85,9 +83,9 @@
         "task": "Download vscode",
         "comments": []
       }
-  ],
-  [
-      {
+    },
+    "done": {
+      "4": {
         "employeeId": "3zB6PKuzIdVWa513jTYJTFod",
         "color": "#EDB88B",
         "description": "Create a new branch for the project",
@@ -97,7 +95,7 @@
         "task": "Create a new branch",
         "comments": []
       },
-      {
+      "5": {
         "employeeId": "Q624CRaIU4gGzbCOPq7Hkk01",
         "color": "#FAD8D6",
         "description": "Use 'npm install' to install dependencies",
@@ -107,8 +105,6 @@
         "task": "Install dependencies",
         "comments": []
       }
-    ]
-  ]
-]
-
-
+    }
+  }
+}

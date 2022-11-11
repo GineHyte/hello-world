@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import Modal from './modal'
 import TaskForm from './task-form';
 import TodoList_comp from "./task-comp";
@@ -17,12 +17,17 @@ function Todo() {
   let isQueryDeleteAll = false;
   let ListToDelete, ElementToDelete, ElementToEdit, ListToEdit;
 
+  const DeleteModal = useRef();
+  const nullModal = useRef();
+  const EditModal = useRef();
+
 
   useEffect(() => {
     const query = ref(db);
     return onValue(query, (snapshot) => {
       let data = snapshot.val();
       if (snapshot.exists()) {
+        console.log(data);
         if (data[1] === undefined) { data.push({}) }
         let dataTemp = [[], [], []];
         let listExists = Object.keys(data[1]);
@@ -34,27 +39,6 @@ function Todo() {
       }
     });
   }, []);
-
-
-
-  // function checkForSameId(todoList) {
-  //   let maxId = -1;
-  //   todoList.map((taskList) => (taskList.map((task) => (maxId = Math.max(maxId, task.id)))));
-  //   let idList = [];
-  //   const checkedTodoList = todoList.map((taskList) => {
-  //     taskList.map((task) => {
-  //       if (idList.includes(task.id)) {
-  //         console.log("id already exists", task.id);
-  //         task.id = maxId + 1;
-  //         console.log("id was changed on maxId + 1 ", task.id);
-  //       }
-  //       else{
-  //         idList.push(task.id);
-  //       }
-  //     })
-  //   });
-  //   setTodoList([...checkedTodoList]);
-  // }
 
   async function writeData(color, description, id, image, status, task) {
     let maxId = -1;
@@ -92,7 +76,6 @@ function Todo() {
 
   function addNewTodo(e) {
     e.preventDefault();
-    document.getElementById("color").value = "#C8C8C8";
     if (color == null) { setColor("#C8C8C8"); color = "#C8C8C8"; }
     for (let i = 0; i <= 2; i++) e.target.children[i].children[1].value = "";
     e.target.children[3].children[1].value = "#FFFFFF";
@@ -124,7 +107,6 @@ function Todo() {
 
   const deleteList = () => {
     setId(-1);
-    try { document.getElementsByClassName("card")[0].style.display = "none"; } catch (e) { }
     setTodoList([[], [], []]);
     updateFullList([[], [], []]);
   }
@@ -140,7 +122,7 @@ function Todo() {
       case "queryAll":
         if (!isQueryDeleteAll) {
           e.preventDefault();
-          var modal = document.getElementById("DeleteModal");
+          var modal = DeleteModal.current;
           modal.style.display = "block";
           modal.children[0].children[1].children[0].children[1].children[0].textContent = "do you want to delete all?";
           isQueryDeleteAll = true;
@@ -148,7 +130,7 @@ function Todo() {
         break;
       case "query":
         if (!isQueryDelete) {
-          var modal = document.getElementById("DeleteModal");
+          var modal = DeleteModal.current;
           modal.style.display = "block";
           modal.children[0].children[1].children[0].children[1].children[0].textContent = "do you want to delete "
             + String(todoList.map(taskType => (taskType.map(task => (task.id === taskId ? task.task : ""))))).replace(/,/g, "") + "?";
@@ -161,17 +143,17 @@ function Todo() {
         if (isQueryDeleteAll) {
           deleteList();
           isQueryDeleteAll = false;
-          var modal = document.getElementById("DeleteModal");
+          var modal = DeleteModal.current;
           modal.style.display = "none";
           break;
         }
         deleteElement(e, ElementToDelete, ListToDelete);
-        var modal = document.getElementById("DeleteModal");
+        var modal = DeleteModal.current;
         modal.style.display = "none";
         isQueryDelete = false;
         break;
       case "Cancel":
-        var modal = document.getElementById("DeleteModal");
+        var modal = DeleteModal.current;
         modal.style.display = "none";
         isQueryDelete = false;
         isQueryDeleteAll = false;
@@ -182,7 +164,7 @@ function Todo() {
 
   const editElement = (e, id, list) => {
     console.log(todoList[list][id]);
-    var modal = document.getElementById("EditModal");
+    var modal = EditModal.current;
     modal.style.display = "block";
     modal.children[0].children[1].children[0].children[1].children[0].value = todoList[list][id].task;
     ElementToEdit = todoList[list][id].id;
@@ -206,24 +188,26 @@ function Todo() {
 
   const saveComment = (e, list, id, comment) => {
     e.preventDefault();
-    var modal = document.getElementById("nullModal");
+    var modal = nullModal.current;
     modal.style.display = "block";
     console.log("comment", comment);
     const todoToEdit = todoList[list];
     let oldComments = [];
-    for(let i=0; i< todoToEdit.length; i++) if(todoToEdit[i].id === id) oldComments = todoToEdit[i].comments;
+    for (let i = 0; i < todoToEdit.length; i++) if (todoToEdit[i].id === id) oldComments = todoToEdit[i].comments;
     console.log("oldComment", oldComments);
-    let objComment = { id: oldComments === undefined?1:oldComments[oldComments.length-1].id+1, comment: comment };
-    console.log("objComment", objComment);  
-    setTodoList([...todoList.slice(0, list), 
-      todoToEdit.map((task) => {if(task.id === id){  if(task.comments!==undefined) {task.comments.push(objComment);console.log(task)}
-      else{task = Object.assign(task,{"comments": []});console.log(task);task.comments.push(objComment)}}
-      else{return task}}),
-     ...todoList.slice(list + 1, todoList.length)]);
+    let objComment = { id: oldComments === undefined ? 1 : oldComments[oldComments.length - 1].id + 1, comment: comment };
+    console.log("objComment", objComment);
+    setTodoList([...todoList.slice(0, list),
+    todoToEdit.map((task) => {
+      if (task.id === id) {
+        if (task.comments !== undefined) { task.comments.push(objComment); console.log(task) }
+        else { task = Object.assign(task, { "comments": [] }); console.log(task); task.comments.push(objComment) }
+      }
+      else { return task }
+    }),
+    ...todoList.slice(list + 1, todoList.length)]);
     setTodoList([...todoList]);
     updateFullList(todoList);
-    document.getElementById("comment-input" + id).value = "";
-    document.getElementById("comment-buttons" + id).style.display = "none";
   }
   function onDragEnd(result) {
     if (!result.destination) {
@@ -260,7 +244,7 @@ function Todo() {
 
   return (
     <div className="block">
-      <div className="editModal" id="EditModal"><Modal closeModal={closeModal} title={'EditModal'} content={
+      <div className="editModal" id="EditModal" ref={EditModal}><Modal closeModal={closeModal} title={'EditModal'} content={
         <div>
           <header className="modal-card-head">
             <p className="modal-card-title">Edit</p>
@@ -275,7 +259,7 @@ function Todo() {
           </footer>
         </div>
       } /></div>
-      <div className="deleteModal" id="DeleteModal"><Modal deleteElementModal={deleteElementModal} closeModal={closeModal} title={'DeleteModal'} content={
+      <div className="deleteModal" id="DeleteModal" ref={DeleteModal}><Modal deleteElementModal={deleteElementModal} closeModal={closeModal} title={'DeleteModal'} content={
         <div>
           <header className="modal-card-head">
             <p className="modal-card-title is-warning">Warning</p>
@@ -290,19 +274,19 @@ function Todo() {
           </footer>
         </div>
       } /></div>
-            <div className="nullModal" id="nullModal"><Modal closeModal={closeModal} title={'nullModal'} content={
-          <div>
+      <div className="nullModal" id="nullModal" ref={nullModal}><Modal closeModal={closeModal} title={'nullModal'} content={
+        <div>
           <header className="modal-card-head">
-              <p className="modal-card-title">Info</p>
-              <button className="delete" onClick={(e) => closeModal(e, 'nullModal')} aria-label="close"></button>
+            <p className="modal-card-title">Info</p>
+            <button className="delete" onClick={(e) => closeModal(e, 'nullModal')} aria-label="close"></button>
           </header>
           <section className="modal-card-body">
-              <p>Comment saved!</p>
+            <p>Comment saved!</p>
           </section>
           <footer className="modal-card-foot">
-              <button className="button" onClick={(e) => closeModal(e, 'nullModal')}>Close</button>
+            <button className="button" onClick={(e) => closeModal(e, 'nullModal')}>Close</button>
           </footer>
-          </div>
+        </div>
       } /></div>
       <TaskForm deleteElementModal={deleteElementModal} handleChange={handleChange} addNewTodo={addNewTodo} />
       <TodoList_comp

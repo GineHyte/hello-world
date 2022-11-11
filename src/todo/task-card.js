@@ -1,6 +1,6 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { solid, regular, brands, icon } from '@fortawesome/fontawesome-svg-core/import.macro'
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import Modal from './modal';
 
 const TaskCard = (props) => {
@@ -9,6 +9,10 @@ const TaskCard = (props) => {
     let index = props.index;
     let taskStatus, image, color, employee = "";
     let isDropDownMenu = false;
+
+    const commentButtons = useRef();
+    const commentInputs = useRef();
+    const employeeChooserMenuElement = useRef();
 
     if (index > -1) {
         todoList = props.todoList;
@@ -23,12 +27,12 @@ const TaskCard = (props) => {
     }
 
     const commentBtn = (e) => {
-        if (e.target.value !== "") { document.getElementById("comment-buttons" + id).style.display = "flex"; }
-        else { document.getElementById("comment-buttons" + id).style.display = "none"; }
+        if (e.target.value !== "") { commentButtons.current.style.display = "flex"; }
+        else { commentButtons.current.style.display = "none"; }
     }
 
     const employeeChooserMenu = (id) => {
-        let menu = document.getElementById("employeeChooserMenu" + id);
+        let menu = employeeChooserMenuElement.current;
         if (!isDropDownMenu) {
             menu.style.display = "block";
             isDropDownMenu = true;
@@ -48,50 +52,51 @@ const TaskCard = (props) => {
             <div className="card-content">
                 <div className="media">
                     <div className="media-content">
-                        <p className="title is-4" style={{color: props.wc_hex_is_light(todoList[index].color)?"#000000":"#FFFFFF"}}>{employee?.name}</p>
-                        <p className="subtitle is-6" style={{color: props.wc_hex_is_light(todoList[index].color)?"#000000":"#FFFFFF"}}>{employee?.jobTitle}</p>
-                        <p className="subtitle is-6" style={{color: props.wc_hex_is_light(todoList[index].color)?"#000000":"#FFFFFF"}}>{employee?.email}</p>
-                        <p className="subtitle is-6" style={{color: props.wc_hex_is_light(todoList[index].color)?"#000000":"#FFFFFF"}}>{employee?.phone}</p>
+                        <p className="title is-4" style={{ color: props.wc_hex_is_light(todoList[index].color) ? "#000000" : "#FFFFFF" }}>{employee?.name}</p>
+                        <p className="subtitle is-6" style={{ color: props.wc_hex_is_light(todoList[index].color) ? "#000000" : "#FFFFFF" }}>{employee?.jobTitle}</p>
+                        <p className="subtitle is-6" style={{ color: props.wc_hex_is_light(todoList[index].color) ? "#000000" : "#FFFFFF" }}>{employee?.email}</p>
+                        <p className="subtitle is-6" style={{ color: props.wc_hex_is_light(todoList[index].color) ? "#000000" : "#FFFFFF" }}>{employee?.phone}</p>
                     </div>
                     <div>
                         <div className="dropdown is-active">
                             <div className="dropdown-trigger">
                                 <div className='drop-down-btn'>
-                                    <button className="button has-background-info" onClick={() => employeeChooserMenu(id)}>
+                                    <button className="button has-background-info" onClick={employeeChooserMenu}>
                                         <FontAwesomeIcon icon={icon({ name: 'caret-down', style: 'solid' })} />
                                     </button>
                                 </div>
                             </div>
-                            <div className="dropdown-menu" role="menu" id={'employeeChooserMenu' + id}>
+                            <div className="dropdown-menu" role="menu" ref={employeeChooserMenuElement}>
                                 {props.employeeList.map((employee) => (
                                     <div key={employee.id} className="dropdown-content">
-                                        <a className="dropdown-item" onClick={() => { employeeChooserMenu(id); props.chooseEmployee(props.list, employee.id, index) }}>{employee.name}</a>
+                                        <a className="dropdown-item" onClick={() => { employeeChooserMenu(); props.chooseEmployee(props.list, employee.id, index) }}>{employee.name}</a>
                                     </div>
                                 ))}
                             </div>
                         </div>
-                        {/* <div >
-                        <a className='dropdown-item' onClick={()=>props.chooseEmployee(props.list, employee.id, id)}>Test</a>
-                    </div> */}
                     </div>
                 </div>
-                <p className="title is-4" style={{color: props.wc_hex_is_light(todoList[index].color)?"#000000":"#FFFFFF"}}>{id > -1 ? todoList[index].task : ""}</p>
-                <div className="content" style={{color: props.wc_hex_is_light(todoList[index].color)?"#000000":"#FFFFFF"}}>
+                <p className="title is-4" style={{ color: props.wc_hex_is_light(todoList[index].color) ? "#000000" : "#FFFFFF" }}>{id > -1 ? todoList[index].task : ""}</p>
+                <div className="content" style={{ color: props.wc_hex_is_light(todoList[index].color) ? "#000000" : "#FFFFFF" }}>
                     {index > -1 ? todoList[index].description : ""}
                 </div>
-                <form onSubmit={(e) => props.saveComment(e, props.list, id, document.getElementById("comment-input" + id).value)}>
+                <form onSubmit={(e) => {
+                    props.saveComment(e, props.list, id, commentInputs.current.value);
+                    commentInputs.current.value = "";
+                    commentButtons.current.style.display = "none";
+                }}>
                     <div className="control">
                         {todoList[index].comments?.map((comment) => (
-                            <input key={"comment" + id + comment.id} value={comment.comment} className="input comments-inputs" type="text" readOnly/>
+                            <input key={"comment" + id + comment.id} value={comment.comment} className="input comments-inputs" type="text" readOnly />
                         ))}
-                        <input className="input" id={"comment-input" + id} type="text" onChange={(e) => commentBtn(e)} placeholder="type your comment" required/>
+                        <input className="input" ref={commentInputs} type="text" onChange={(e) => commentBtn(e)} placeholder="type your comment" required />
                     </div>
-                    <div className='comment-buttons' id={"comment-buttons" + id}>
+                    <div className='comment-buttons' ref={commentButtons}>
                         <button type="submit" className='button is-success'>save</button>
                         <button type="button" className='button is-danger'
                             onClick={() => {
-                                document.getElementById("comment-input" + id).value = "";
-                                document.getElementById("comment-buttons").style.display = "none";
+                                commentInputs.current.value = "";
+                                commentButtons.current.style.display = "none";
                             }}>cancel</button>
                     </div>
                 </form>
