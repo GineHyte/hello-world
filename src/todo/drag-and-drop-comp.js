@@ -18,16 +18,18 @@ const DnDComp = (props) => {
         const brightness = ((c_r * 299) + (c_g * 587) + (c_b * 114)) / 1000;
         return brightness > 155;
     }
-
+    console.log(props.todoList);
     return (
         <Droppable droppableId={props.droppableId}>
             {(provided, snapshot) => (
                 <div
                     {...provided.droppableProps}
                     ref={provided.innerRef}
-                >
-                    {props.todoList?.map((task, index) => (
-                        <Draggable key={task.task + task.id} draggableId={task.task + task.id} index={index}>
+            >   
+
+                    {/* {Object.values(props.todoList).forEach((task, index) => ( */}
+                    {props.todoList.map((task, index) => (
+                        <Draggable key={task.task + Object.keys(props.todoList)[index]} draggableId={task.task + task.id} index={index}>
                             {(provided, snapshot) => (
                                 <div
                                     ref={provided.innerRef}

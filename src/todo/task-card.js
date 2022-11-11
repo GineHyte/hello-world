@@ -67,7 +67,7 @@ const TaskCard = (props) => {
                                 </div>
                             </div>
                             <div className="dropdown-menu" role="menu" ref={employeeChooserMenuElement}>
-                                {props.employeeList.map((employee) => (
+                                {Object.values(props.employeeList).map((employee) => (
                                     <div key={employee.id} className="dropdown-content">
                                         <a className="dropdown-item" onClick={() => { employeeChooserMenu(); props.chooseEmployee(props.list, employee.id, index) }}>{employee.name}</a>
                                     </div>

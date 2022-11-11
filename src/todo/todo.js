@@ -11,8 +11,8 @@ function Todo() {
   const [name, setName] = useState();
   const [description, setDescription] = useState();
   const [image, setImage] = useState();
-  var [todoList, setTodoList] = useState([]);
-  const [employeeList, setEmployeeList] = useState([]);
+  var [todoList, setTodoList] = useState({});
+  const [employeeList, setEmployeeList] = useState({});
   let isQueryDelete = false;
   let isQueryDeleteAll = false;
   let ListToDelete, ElementToDelete, ElementToEdit, ListToEdit;
@@ -28,49 +28,26 @@ function Todo() {
       let data = snapshot.val();
       if (snapshot.exists()) {
         console.log(data);
-        if (data[1] === undefined) { data.push({}) }
-        let dataTemp = [[], [], []];
-        let listExists = Object.keys(data[1]);
-        data[1] = Object.values(data[1]);
-        for (let i = 0; i < listExists.length; i++) { dataTemp[parseInt(listExists[i])] = data[1][i]; }
-        data[1] = dataTemp;
-        setTodoList(data[1]);
-        setEmployeeList(data[0]);
+        setTodoList(data.todoList);
+        console.log(data["todoList"]);
+        setEmployeeList(data.employeeList);
       }
     });
   }, []);
 
-  async function writeData(color, description, id, image, status, task) {
-    let maxId = -1;
-    todoList.map((taskList) => (taskList.map((task) => (maxId = Math.max(maxId, task.id)))));
-    console.log("maxId", maxId);
+  async function updateFullList(todoList) {
     const db = getDatabase();
-    await set(ref(db, "1/" + status + "/" + id), {
-      color: color,
-      description: description,
-      id: maxId + 1,
-      image: image,
-      status: status,
-      task: task,
-      comment: ""
+    await update(ref(db), {
+      todoList: todoList
     });
   }
 
-  async function updateFullList(todoList) {
-    const db = getDatabase();
-    for (let i = 0; i < todoList.length; i++) {
-      await update(ref(db, "1"), {
-        [i]: todoList[i]
-      });
-    }
-  }
-
   function chooseEmployee(list, employeeId, taskId) {
-    console.log("chooseEmployee", employeeId);
+    console.log("chooseEmployee", todoList);
     let newTodoList = todoList;
     newTodoList[list][taskId].employeeId = employeeId;
-    console.log("newTodoList", newTodoList[list][taskId]);
-    setTodoList([...newTodoList]);
+    console.log("newTodoList", newTodoList);
+    setTodoList(newTodoList);
     updateFullList(newTodoList);
   }
 
@@ -79,10 +56,17 @@ function Todo() {
     if (color == null) { setColor("#C8C8C8"); color = "#C8C8C8"; }
     for (let i = 0; i <= 2; i++) e.target.children[i].children[1].value = "";
     e.target.children[3].children[1].value = "#FFFFFF";
-    const newTodo = { id: todoList[0].length + 1, task: name, status: 0, description: description, image: image, color: color };
-    setTodoList([[...todoList[0], newTodo], ...todoList.slice(1)]);
-    console.log(todoList[0].length);
-    writeData(color, description, todoList[0].length, image, 0, name);
+    let maxId = -1;
+    Object.keys(todoList).forEach((status, indexS) => {
+      Object.keys(todoList[status]).forEach((task,indexT) => {
+        maxId = Math.max(maxId, task);
+      });
+    });
+    console.log("maxId", maxId);
+    const newTodo = { [maxId+1]: { id:maxId+1, task: name, description: description, image: image, color: color, employeeId: " ", comments: [] }};
+    setTodoList({ ...todoList, "open" : Object.assign({}, todoList["open"], newTodo) });
+    console.log({ ...todoList, "open" : Object.assign({}, todoList["open"], newTodo) });
+    updateFullList({ ...todoList, "open" : Object.assign({}, todoList["open"], newTodo) });
   }
 
   const handleChange = (event) => {
@@ -107,11 +91,16 @@ function Todo() {
 
   const deleteList = () => {
     setId(-1);
-    setTodoList([[], [], []]);
-    updateFullList([[], [], []]);
+    setTodoList({});
+    updateFullList({todoList: {
+      "open": {},
+      "in-progress": {},
+      "done": {}
+    }});
   }
 
   const deleteElement = (e, taskId, deleteList) => {
+    console.log("deleteElement", taskId, deleteList);
     const todoToDelete = todoList[deleteList];
     setTodoList([...todoList.slice(0, deleteList), todoToDelete.filter((task) => task.id !== taskId), ...todoList.slice(deleteList + 1, todoList.length)]);
     updateFullList([...todoList.slice(0, deleteList), todoToDelete.filter((task) => task.id !== taskId), ...todoList.slice(deleteList + 1, todoList.length)]);
@@ -190,23 +179,26 @@ function Todo() {
     e.preventDefault();
     var modal = nullModal.current;
     modal.style.display = "block";
-    console.log("comment", comment);
+    console.log("id", id, "list ", list, "comment", comment);
     const todoToEdit = todoList[list];
+    console.log("todoToEdit", todoToEdit);
     let oldComments = [];
     for (let i = 0; i < todoToEdit.length; i++) if (todoToEdit[i].id === id) oldComments = todoToEdit[i].comments;
-    console.log("oldComment", oldComments);
-    let objComment = { id: oldComments === undefined ? 1 : oldComments[oldComments.length - 1].id + 1, comment: comment };
+    let objComment = { id: oldComments?.length === 0 ? 1 : oldComments[oldComments.length - 1].id + 1, comment: comment };
     console.log("objComment", objComment);
-    setTodoList([...todoList.slice(0, list),
-    todoToEdit.map((task) => {
-      if (task.id === id) {
-        if (task.comments !== undefined) { task.comments.push(objComment); console.log(task) }
-        else { task = Object.assign(task, { "comments": [] }); console.log(task); task.comments.push(objComment) }
-      }
-      else { return task }
-    }),
-    ...todoList.slice(list + 1, todoList.length)]);
-    setTodoList([...todoList]);
+    // setTodoList([...todoList.slice(0, list),
+    // todoToEdit.map((task) => {
+    //   if (task.id === id) {
+    //     if (task.comments !== undefined) { task.comments.push(objComment); console.log(task) }
+    //     else { task = Object.assign(task, { "comments": [] }); console.log(task); task.comments.push(objComment) }
+    //   }
+    //   else { return task }
+    // }),
+    // ...todoList.slice(list + 1, todoList.length)]);
+    // setTodoList({...todoList, [list]: {{Object.fromEntries(Object.entries(obj).filter((k) => k !== id))}, [id]: {comments: [todoToEdit[id].comments?todoToEdit[id].comments:null, objComment]}}});
+    let TempObject = Object.assign({...todoToEdit}, {[id]: {comments: [todoToEdit[id].comments?todoToEdit[id].comments:null, objComment]}});
+    console.log("TempObject", TempObject);
+    // console.log({...todoList, [list]: {Object.assign([id]: {comments: [todoToEdit[id].comments?todoToEdit[id].comments:null, objComment]}}});
     updateFullList(todoList);
   }
   function onDragEnd(result) {
@@ -216,15 +208,22 @@ function Todo() {
     }
     let sortTodoList = todoList;
 
-    for (let i = 0; i <= 2; i++) if (sortTodoList[i] === undefined) sortTodoList[i] = [];
-    let destList = result.destination.droppableId == "open" ? 0 : result.destination.droppableId == "in-progress" ? 1 : 2
-    let sourceList = result.source.droppableId == "open" ? 0 : result.source.droppableId == "in-progress" ? 1 : 2
+    for (let i = 0; i <= 2; i++) if (sortTodoList[i==0?"open":i==1?"in-progress":"done"] === undefined) sortTodoList[i] = [];
+    let destList = result.destination.droppableId;
+    let sourceList = result.source.droppableId;
+    console.log("sortTodoList", sortTodoList);
+    console.log("destList", sortTodoList[destList], "sourceList", sortTodoList[sourceList]);
 
-    sortTodoList[destList]?.splice(result.destination.index, 0,
-      sortTodoList[sourceList].splice(result.source.index, 1)[0]);
-    sortTodoList[destList][result.destination.index].status = destList;
+    Object.assign({[destList]:sortTodoList[destList]}, { [result.destination.droppableId]: todoList[sourceList][result.source.index] });
+    Object.assign({[sourceList]:sortTodoList[sourceList]}, { [result.source.droppableId]: todoList[destList][result.destination.index] });
 
-    setTodoList([...sortTodoList]);
+
+
+    // Object.values(sortTodoList)[destList]?.splice(result.destination.index, 0,
+    //   Object.values(sortTodoList)[sourceList].splice(result.source.index, 1)[0]);
+    //   Object.values(sortTodoList)[destList][result.destination.index].status = destList;
+    console.log("sortTodoList", sortTodoList);
+    setTodoList({sortTodoList});
     updateFullList(todoList);
   }
 
